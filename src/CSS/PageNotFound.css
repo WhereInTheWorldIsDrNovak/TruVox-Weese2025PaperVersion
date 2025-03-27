@@ -1,0 +1,38 @@
+.pagenotfoundbutton {
+  border: 1.5px solid rgb(41, 41, 130);
+  border-radius: 30px !important;
+  font-size: 17px !important;
+  background: linear-gradient(to left, #5a82e1, #2f2a5a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  width: 220px !important;
+  height: 50px !important;
+  text-align: center !important;
+  margin: 0 auto !important;
+  padding-top: 2px !important;
+  padding-bottom: 5px !important;
+  margin-top: 7px !important;
+  letter-spacing: 4px !important;
+  font-weight: bold !important;
+}
+
+.pagenotfoundbutton:hover {
+  cursor: pointer;
+}
+
+.pagenotfoundmain {
+  width: 40vw;
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: 2vw;
+
+  /* Vertically centers the main content */
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}

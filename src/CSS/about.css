@@ -1,0 +1,49 @@
+.beginButton {
+  width: 90px;
+}
+
+.centerTitle {
+  text-align: center;
+}
+
+.customTitle {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 1200 !important;
+  font-size: 30px !important;
+  letter-spacing: 2px;
+  color: #8073a7 !important;
+
+  text-decoration: underline;
+  text-underline-offset: 7px;
+}
+
+.contacting {
+  background-color: rgb(227, 227, 227);
+  font-size: small;
+  display: flex;
+  margin-top: 130px;
+  padding-top: 50px !important;
+}
+.email {
+  font-size: 20px;
+  padding-top: -100px !important;
+  padding-left: 190px;
+  width: 400px;
+  line-height: 20px;
+  margin-bottom: 50px;
+}
+.location {
+  font-size: 20px;
+  padding-top: -110px;
+  width: 850px;
+  line-height: 30px;
+  padding-left: 550px !important;
+  padding-bottom: 50px;
+}
+.contactForm {
+  margin-top: 30px;
+}
+.aboutmain {
+  height: 60vh;
+  width: 1600px;
+}

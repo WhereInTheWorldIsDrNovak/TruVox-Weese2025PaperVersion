@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"> -->
+    <meta name="theme-color" content="#000000" />
+    <!-- <script src="./src/fxauto.min.js"></script> -->
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link rel="icon" type="image/x-icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="index.css" />
+
+    <style>
+      body {
+        margin: 0 0 0 0;
+      }
+    </style>
+    <title>TruVox: Gender-Affirming Voice Training</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
+  <script>
+    function resetHtmlFont() {
+      const baseFontSize = screen.width / 10;
+      document.documentElement.style.fontSize = baseFontSize + 'px';
+    }
+
+    resetHtmlFont();
+    window.onresize = resetHtmlFont;
+  </script>
+</html>

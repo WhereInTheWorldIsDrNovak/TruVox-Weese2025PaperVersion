@@ -1,0 +1,10 @@
+echo "Running pre-commit hook..."
+npx gts lint . --fix
+npm run fix
+echo "Linting and formatting fix complete."
+echo "re-running lint to ensure all issues are fixed..."
+npx gts lint .
+echo "Linting complete."
+echo "Staging files..."
+git add .
+echo "Files have been staged."

@@ -1,0 +1,12 @@
+{
+  "json_files": [
+    "Bigger and better.json",
+    "Drum and bugle corps.json",
+    "He has a good job.json"
+  ],
+  "base_filenames": [
+    "Bigger and better",
+    "Drum and bugle corps",
+    "He has a good job"
+  ]
+}

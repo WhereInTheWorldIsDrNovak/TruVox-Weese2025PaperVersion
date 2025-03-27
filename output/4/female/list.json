@@ -1,0 +1,8 @@
+{
+  "json_files": [
+    "Cold and snowy.json",
+    "Fine and dandy.json",
+    "Warm and sunny.json"
+  ],
+  "base_filenames": ["Cold and snowy", "Fine and dandy", "Warm and sunny"]
+}

@@ -1,0 +1,103 @@
+{
+  "name": "react-demo",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "/transvoice",
+  "dependencies": {
+    "@ant-design/icons": "^5.6.0",
+    "@kbox-labs/react-echarts": "^1.0.4",
+    "@sgratzl/chartjs-chart-boxplot": "^4.4.4",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.18.59",
+    "@types/react": "^18.2.31",
+    "@types/react-dom": "^18.2.14",
+    "@ungap/url-search-params": "^0.2.2",
+    "ahooks": "^3.7.8",
+    "antd": "^5.10.2",
+    "axios": "^1.7.1",
+    "chart.js": "^4.4.7",
+    "chartjs-chart-box-and-violin-plot": "^4.0.0",
+    "echarts": "^5.5.0",
+    "echarts-for-react": "^3.0.2",
+    "framer-motion": "^10.16.4",
+    "fs": "^0.0.1-security",
+    "hark": "^1.2.3",
+    "jquery": "^3.7.1",
+    "js-cookie": "^3.0.5",
+    "mammoth": "^1.7.1",
+    "path": "^0.12.7",
+    "pcm-player": "^0.0.18",
+    "pdf-to-text": "^0.0.7",
+    "react": "^18.3.1",
+    "react-audio-player": "^0.17.0",
+    "react-chartjs-2": "^5.3.0",
+    "react-dom": "^18.3.1",
+    "react-h5-audio-player": "^3.9.1",
+    "react-pdf": "^7.7.1",
+    "react-pdftotext": "^1.1.1",
+    "react-router-dom": "^6.23.1",
+    "react-scripts": "5.0.1",
+    "tone": "^15.0.4",
+    "tonegenerator": "^0.3.3",
+    "typescript": "^4.9.5",
+    "waveheader": "^0.0.2",
+    "web-vitals": "^2.1.4",
+    "webfontloader": "^1.6.28"
+  },
+  "scripts": {
+    "start": "react-scripts start --host 0.0.0.0",
+    "prepare:husky": "husky install",
+    "prepare": "npm run compile",
+    "build": "react-scripts build",
+    "debug": "REACT_APP_DEBUG=true react-scripts start",
+    "docker-start": "DISABLE_ESLINT_PLUGIN=true REACT_APP_DEBUG=false react-scripts start",
+    "docker-debug": "DISABLE_ESLINT_PLUGIN=true REACT_APP_DEBUG=true react-scripts start",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "lint:all": "gts lint . --fix",
+    "lint": "gts lint",
+    "clean": "gts clean",
+    "compile": "tsc",
+    "fix": "gts fix",
+    "pretest": "npm run compile",
+    "posttest": "npm run lint"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "lint-staged": {
+    "*.{css,scss,json,md,js,jsx,ts,tsx}": [
+      "gts lint",
+      "gts fix",
+      "git add"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/hark": "^1.2.5",
+    "@types/jquery": "^3.5.29",
+    "@types/js-cookie": "^3.0.6",
+    "@types/node": "^22.7.5",
+    "@types/webfontloader": "^1.6.38",
+    "gts": "^5.3.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.3.0"
+  }
+}

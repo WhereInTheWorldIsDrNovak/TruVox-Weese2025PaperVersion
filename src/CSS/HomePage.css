@@ -1,0 +1,461 @@
+/* Main Container */
+.main-container {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Introduction Section */
+.intro-section {
+  width: 100%;
+  height: 5rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0;
+}
+
+.intro-title {
+  font-size: 2.6vw !important;
+  color: rgb(36, 36, 131) !important;
+  max-width: 5rem;
+  margin: 0 auto;
+  text-align: center;
+  margin-bottom: -5vh;
+  font-weight: normal !important;
+}
+
+.intro-subtitle {
+  font-size: 2.6vw !important;
+  color: rgb(36, 36, 131) !important;
+  max-width: 400px;
+  margin: 20px auto 0;
+  text-align: center;
+  font-weight: normal !important;
+  margin-top: -2.5vh !important;
+}
+
+.intro-paragraph {
+  font-size: 1.5vw;
+  color: rgb(36, 36, 131);
+  max-width: 500px;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.tutorial-button {
+  border: 1.5px solid rgb(41, 41, 130);
+  border-radius: 30px;
+  font-size: 17px;
+  background: linear-gradient(to left, #5a82e1, #2f2a5a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  width: 180px;
+  text-align: center;
+  margin: 0 auto;
+  padding-top: 2px;
+  padding-bottom: 5px;
+  margin-top: 7px;
+  letter-spacing: 4px;
+  font-weight: bold;
+}
+
+/* Remove hover effect from the "TUTORIAL" button */
+.tutorial-button:hover,
+.tutorial-button:focus,
+.tutorial-button:active {
+  background: linear-gradient(to left, #5a82e1, #2f2a5a) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  border-color: rgb(41, 41, 130) !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Bottom Section */
+.bottom-section {
+  padding: 20px;
+  background-color: white;
+  margin-top: 10px;
+}
+
+.bottom-title {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+.modules-title {
+  text-decoration: underline;
+  text-decoration-skip-ink: auto;
+  text-underline-offset: 10px;
+  color: #8778aa !important;
+}
+
+.bottom-paragraph {
+  font-size: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+  color: #6e6e73 !important;
+  line-height: 40px;
+}
+
+/* Card Styles */
+.card-style {
+  text-align: center;
+  height: 100%;
+  border: 1px solid;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.pitch-training-card {
+  border-color: #bbcce9 !important;
+}
+
+.pitch-volume-card {
+  border-color: #8daada !important;
+  margin: 0;
+}
+
+.video-card {
+  border-color: #436ac2 !important;
+}
+
+.assessment-card {
+  border-color: #8376aa !important;
+}
+
+.card-number {
+  font-size: 0.5rem;
+  padding-top: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.pitch-number {
+  color: #bbcce9 !important;
+}
+
+.volume-number {
+  color: #8daada !important;
+}
+
+.video-number {
+  color: #436ac2 !important;
+}
+
+.assessment-number {
+  color: #8376aa !important;
+}
+
+.card-title {
+  margin-top: 0;
+}
+
+.pitch-title {
+  color: #bbcce9 !important;
+}
+
+.volume-title {
+  color: #8daada !important;
+}
+
+.video-title {
+  color: #436ac2 !important;
+}
+
+.assessment-title {
+  color: #8376aa !important;
+}
+
+.card-paragraph {
+  font-size: 1.2vw;
+  color: #6e6e73 !important;
+  margin: 2.7vw 2vw 1vw 2vw;
+}
+
+.volume-paragraph {
+  margin: 1vw 2vw 1vw 2vw;
+}
+
+.assessment-paragraph {
+  margin: 3.2vw 2vw 1vw 2vw;
+}
+
+/* Col Padding Zero */
+.col-padding-zero {
+  padding: 0;
+}
+
+/* More Info Button */
+.more-info-button {
+  color: inherit;
+  padding: 0;
+}
+
+.more-info-link {
+  padding: 0;
+}
+
+/* Modals */
+.modal-title {
+  text-align: center;
+  font-size: 0.3rem;
+  text-decoration: underline;
+  text-underline-offset: 10px;
+}
+
+.pitch-modal-title {
+  color: #8778aa !important;
+}
+
+.volume-modal-title {
+  color: #436ac2 !important;
+}
+
+/* Modal Paragraphs */
+.modal-paragraph-container {
+  text-align: center;
+}
+
+.modal-paragraph {
+  font-size: 0.11rem;
+  color: #6e6e73 !important;
+}
+
+.pitch-modal-paragraph {
+  margin-bottom: 20px;
+  width: 550px;
+  margin-left: 250px;
+}
+
+.volume-modal-paragraph {
+  margin-bottom: 20px;
+  margin-top: 20px;
+  width: 550px;
+  margin-left: 300px;
+}
+
+/* Modal Row */
+.modal-row {
+  margin-top: 20px;
+}
+
+/* Modal Col */
+.modal-col {
+  padding: 10px;
+}
+
+.modal-col-margin-left {
+  padding: 5px;
+  margin-left: 24vh;
+}
+
+.modal-col-margin-right {
+  padding: 10px;
+  margin-right: 24vh;
+}
+
+/* Modal Cards */
+.modal-card {
+  text-align: center;
+  height: auto;
+  border: 1px solid;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.modal-card-pitch1,
+.modal-card-pitch4,
+.modal-card-pitch5 {
+  border-color: #8daada;
+}
+
+.modal-card-pitch2 {
+  border-color: #436ac2;
+}
+
+.modal-card-pitch3 {
+  border-color: #8376aa;
+}
+
+.modal-card-volume1,
+.modal-card-volume2 {
+  border-color: #436ac2;
+}
+
+.modal-card-volume3 {
+  border-color: #8daada;
+}
+
+/* Modal Card Numbers */
+.modal-card-number {
+  margin-bottom: 0;
+  font-size: 5vh !important;
+  margin-top: -2vh;
+}
+
+.modal-card-number-pitch1,
+.modal-card-number-pitch4,
+.modal-card-number-pitch5 {
+  color: #8daada !important;
+}
+
+.modal-card-number-pitch2 {
+  color: #436ac2 !important;
+}
+
+.modal-card-number-pitch3 {
+  color: #8376aa !important;
+}
+
+.modal-card-number-volume1,
+.modal-card-number-volume2 {
+  color: #436ac2 !important;
+  margin-bottom: 1vh;
+  margin-top: 0;
+}
+
+.modal-card-number-volume3 {
+  color: #8daada !important;
+  margin-bottom: 10px;
+  font-size: 5vh !important;
+  margin-top: 0;
+}
+
+/* Modal Card Titles */
+.modal-card-title {
+  font-size: 0.175rem;
+  margin-top: 0.01rem;
+}
+
+.modal-card-title-pitch1,
+.modal-card-title-pitch4,
+.modal-card-title-pitch5 {
+  color: #8daada;
+}
+
+.modal-card-title-pitch2 {
+  color: #436ac2;
+}
+
+.modal-card-title-pitch3 {
+  color: #8376aa;
+}
+
+.modal-card-title-volume1,
+.modal-card-title-volume2 {
+  color: #436ac2;
+}
+
+.modal-card-title-volume3 {
+  color: #8daada;
+}
+
+/* Modal Card Paragraphs */
+.modal-card-paragraph {
+  font-size: 0.1rem;
+}
+
+.modal-card-paragraph-pitch1 {
+  margin-top: -1vh;
+}
+
+.modal-card-paragraph-pitch2 {
+  margin-top: -1vh;
+}
+
+.modal-card-paragraph-pitch3 {
+  margin-top: -1vh;
+}
+
+.modal-card-paragraph-pitch4,
+.modal-card-paragraph-pitch5 {
+  margin-top: -1.5vh;
+}
+
+.modal-card-paragraph-volume1 {
+  margin-top: 0.1rem;
+  margin-bottom: 8.5vh !important;
+}
+
+.modal-card-paragraph-volume2 {
+  margin-top: 0.1rem;
+  margin-bottom: 8.5vh !important;
+}
+
+.modal-card-paragraph-volume3 {
+  margin-top: 0.1rem;
+  margin-bottom: 0.1rem !important;
+}
+
+/* Modal Card HR */
+.modal-card-hr {
+  width: 100%;
+}
+
+.modal-card-hr-pitch1 {
+  margin-top: 5.1vh;
+}
+
+.modal-card-hr-pitch2 {
+  margin-top: 5vh;
+}
+
+.modal-card-hr-pitch3 {
+  margin-top: 2vh;
+}
+
+.modal-card-hr-pitch4 {
+  margin-top: 2vh;
+}
+
+.modal-card-hr-pitch5 {
+  margin-top: 4vh;
+}
+
+.modal-card-hr-volume1 {
+  margin-top: 4vh;
+}
+
+.modal-card-hr-volume2 {
+  margin-top: 4vh;
+}
+
+.modal-card-hr-volume3 {
+  margin-top: 3vh;
+}
+
+/* Modal Card Buttons */
+.modal-card-button {
+  border: none;
+  font-size: 0.12rem;
+}
+
+.modal-card-button-pitch1,
+.modal-card-button-pitch4,
+.modal-card-button-pitch5 {
+  color: #8daada !important;
+}
+
+.modal-card-button-pitch2 {
+  color: #436ac2 !important;
+}
+
+.modal-card-button-pitch3 {
+  color: #8376aa !important;
+}
+
+.modal-card-button-volume1,
+.modal-card-button-volume2 {
+  color: #436ac2 !important;
+}
+
+.modal-card-button-volume3 {
+  color: #8daada !important;
+}

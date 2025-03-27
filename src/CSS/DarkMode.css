@@ -1,0 +1,512 @@
+/* MainLayout */
+.LayoutBGP-dark {
+  background: linear-gradient(to bottom, #443455, #23053f);
+  overflow: hidden;
+}
+
+.TVox-dark {
+  position: absolute;
+  left: 20px;
+  padding: 30px;
+  font-size: 30px;
+}
+
+.TVox-dark img {
+  width: 159px;
+  height: 70px;
+  background-color: rgb(37, 35, 35);
+  border-top-left-radius: 0%;
+  border-top-right-radius: 0%;
+  border-bottom-right-radius: 50%;
+  border-bottom-left-radius: 50%;
+  padding-bottom: 15px;
+  padding-top: 1px;
+  margin-top: 15px;
+}
+
+.userIcon-dark > button {
+  background-color: #23053f !important;
+  border-color: #23053f;
+  color: white;
+}
+
+.AvatarModal-dark .ant-modal-content {
+  background-color: #0f0917 !important;
+}
+
+.AvatarModal-dark svg {
+  color: white !important;
+}
+
+.AvatarModal-dark .ant-modal-content .anticon-close svg {
+  color: white !important;
+  background-color: #0f0917 !important;
+}
+
+.AvatarModal-dark .ant-modal-content .ant-modal-close {
+  background-color: #0f0917 !important;
+}
+
+.AvatarModal-dark .ant-modal-content button {
+  background-color: black;
+  border-color: black;
+  color: white;
+}
+
+.AvatarModal-dark .ant-modal-content > .ant-modal-header > .ant-modal-title {
+  background-color: #0f0917 !important;
+  color: white !important;
+}
+
+.AvatarModal-dark .ant-avatar-icon {
+  background-color: darkgray;
+  color: #0f0917;
+}
+
+.AvatarModal-dark .ant-menu {
+  background-color: #0f0917;
+}
+
+.AvatarModal-dark .ant-menu .ant-menu-item {
+  color: white;
+}
+
+.AvatarModal-dark .ant-menu .ant-menu-item.ant-menu-item-selected {
+  color: #1677ff;
+}
+
+.AvatarModal-dark
+  .ant-menu-item.ant-menu-item-only-child.ant-menu-item-selected::after {
+  /* The little bar under the currently selected title */
+  background-color: white !important;
+}
+
+.AvatarModal-dark .ant-space .ant-space-item {
+  color: white;
+}
+
+.menu-item-dark {
+  color: rgb(177, 227, 246) !important;
+}
+
+.menu-item-dark.ant-menu-item-selected {
+  background-color: #8476ab !important;
+  color: white !important;
+}
+
+.customButton-dark {
+  background-color: #0f0917 !important;
+  border-color: #0f0917;
+  color: white !important;
+}
+
+.customFloatButton-dark {
+  background-color: transparent;
+}
+
+.customFloatButton-dark > div {
+  background-color: #0f0917 !important;
+}
+
+.customFloatButton-dark > div:hover {
+  background-color: black !important;
+}
+
+.customFloatButton-dark > div > div > div {
+  color: white !important;
+}
+
+.customGradientButton-dark {
+  border: 1.5px solid rgb(243, 231, 231) !important;
+  border-radius: 30px;
+  font-size: 17px;
+  background: linear-gradient(to bottom, #d7d2e6, #c9d9f3) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  width: 180px;
+  text-align: center;
+  margin: 0 auto;
+  padding-top: 2px;
+  padding-bottom: 5px;
+  margin-top: 7px;
+  letter-spacing: 4px;
+  font-weight: bold;
+}
+
+.customSection-dark {
+  padding: 20px;
+  background-color: #0f0917 !important;
+  margin-top: 10px;
+}
+
+.customCard-dark > div {
+  background-color: #0f0917;
+  border-color: lightblue;
+}
+
+.customCard-dark > a > div {
+  background-color: #0f0917;
+  border-color: plum !important;
+}
+
+.customCard-dark .ant-card-actions {
+  background-color: #0f0917;
+}
+
+.customModal-dark > div {
+  background-color: #0f0917 !important;
+}
+
+.customModal-dark .ant-modal-content {
+  background-color: #0f0917 !important;
+}
+
+.customModal-dark .ant-modal-title {
+  background-color: #0f0917;
+}
+
+.customModal-dark .ant-modal-close svg {
+  color: white;
+}
+
+.text-dark {
+  color: white !important;
+}
+
+.text-wrapper-dark > div {
+  color: white;
+}
+
+.text-wrapper-dark strong {
+  color: white;
+}
+
+.text-wrapper-dark svg {
+  color: white;
+}
+
+.customColorfulText-dark {
+  color: rgb(171, 205, 248) !important;
+}
+
+.customColorfulText2-dark {
+  color: #c4c0ee !important;
+}
+
+.customLightText-dark {
+  color: darkgray !important;
+}
+
+.customStatistic-dark > div {
+  color: white !important;
+}
+
+.customSlider-dark .ant-slider-mark-text {
+  color: white !important;
+}
+
+.customLink-dark {
+  color: rgb(105, 205, 245) !important;
+}
+
+.customLink-dark:hover {
+  color: rgb(80, 185, 255) !important;
+}
+
+.collapse-dark {
+  color: red;
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23ffffff'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>") !important;
+}
+
+.customFooter-dark {
+  color: rgb(77, 202, 243);
+}
+
+.customAnchor-dark a {
+  color: white !important;
+}
+
+.customAnchor-dark .ant-anchor-link-title-active {
+  color: purple !important;
+}
+
+.customAnchor-dark .ant-anchor-ink-visible {
+  background-color: red !important;
+}
+
+/* Sample */
+.customMainButtons-dark {
+  background-color: #140032;
+  border-color: #140032;
+  color: white;
+}
+
+.customMainButtons-dark:hover {
+  background-color: #23053f !important;
+  border-color: #23053f !important;
+  color: #a39bb7 !important;
+}
+
+.customMainButtons-primary-dark {
+  background-color: #8476ab;
+  border-color: #8476ab;
+  color: white;
+}
+
+.customMainButtons-primary-dark:hover {
+  background-color: #a39bb7;
+  border-color: #a39bb7;
+  color: white !important;
+}
+
+.yAxisNumbers-dark > div {
+  color: white;
+}
+
+.yAxisLines-dark > div {
+  border-color: white;
+}
+
+.yAxisLabel-dark {
+  color: white !important;
+}
+
+.timeMarkerNum-dark {
+  color: white;
+}
+
+.timeMarkerLine-dark {
+  border-color: white;
+  background-color: white;
+}
+
+.XAxis-dark > div {
+  color: white;
+}
+
+.pitchCanvas-dark {
+  background-color: #0f0917;
+  color: white;
+}
+
+.customDropdown-dark > ul {
+  background-color: #0f0917 !important;
+}
+
+.customDropdown-dark > ul > li > span {
+  color: white;
+}
+
+.customDropdown-dark button {
+  background-color: #0f0917 !important;
+  border-color: rgb(73, 72, 72);
+  color: white;
+}
+
+.customDropdown-dark svg {
+  color: white;
+}
+
+.customTextArea-dark {
+  background-color: #0f0917;
+  border-color: #0f0917;
+  color: white;
+}
+
+.customTextArea-dark::placeholder {
+  color: rgb(112, 111, 111);
+}
+
+.lyric .lyric-dark {
+  color: rgb(100, 99, 99);
+}
+
+.lyric .highlighted-dark {
+  color: rgb(150, 206, 136);
+}
+
+.settings-dark {
+  background-color: #0f0917 !important;
+  color: white;
+}
+
+.settings-dark .resize-div {
+  background-color: #0f0917;
+  border-color: #0f0917;
+}
+
+.settings-dark .divider-dark {
+  background-color: #33214c !important;
+}
+
+.settings-dark .ant-drawer-title {
+  color: white;
+}
+
+.settings-dark .ant-drawer-close {
+  color: white;
+}
+
+.settings-dark .ant-slider-mark-text {
+  color: white;
+}
+
+.settings-dark .ant-switch {
+  background-color: darkgray !important;
+}
+
+.settings-dark .ant-switch-checked {
+  background-color: #1677ff !important;
+}
+
+.settings-dark .ant-switch > .ant-switch-handle::before {
+  background-color: white !important;
+}
+
+.settings-dark button {
+  background-color: black !important;
+  color: white;
+  border-color: black;
+}
+
+.settings-dark button.ant-btn-primary {
+  background-color: #1677ff !important;
+  color: white;
+  border-color: black;
+}
+
+.settings-dark .ant-radio-button-wrapper {
+  background-color: black;
+  border-color: black;
+  color: white;
+}
+
+.settings-dark .ant-radio-button-wrapper-checked {
+  background-color: #1677ff !important;
+}
+
+.settings-dark .ant-radio-button-wrapper::before {
+  background-color: black;
+  border-color: black;
+  color: white;
+}
+
+.customTour-dark .ant-tour-arrow::before {
+  background-color: #0f0917;
+}
+
+.customTour-dark .ant-tour-inner {
+  background-color: #0f0917;
+}
+
+.customTour-dark .ant-tour-close svg {
+  color: white;
+}
+
+.customTour-dark .ant-tour-close svg:hover {
+  cursor: pointer;
+}
+
+.customTour-dark .ant-tour-title {
+  color: white;
+}
+
+.customTour-dark .ant-tour-description {
+  color: white;
+}
+
+.customTour-dark .ant-tour-footer button.ant-btn-primary {
+  background-color: black;
+  color: white;
+  border: white;
+}
+
+.customTour-dark .ant-tour-footer button.ant-btn-default {
+  background-color: #0f0917;
+  color: white;
+  border: white;
+}
+
+.customTour-dark .ant-tour-footer .ant-tour-indicator {
+  background-color: white !important;
+}
+
+.customTour-dark .ant-tour-footer .ant-tour-indicator-active {
+  background-color: blue !important;
+}
+
+.customTour-dark li {
+  color: white;
+}
+
+.videoContainer-dark {
+  background-color: #8476ab !important;
+  border-color: #8476ab !important;
+}
+
+.videoContainer-dark .ant-col > div {
+  border-color: #8476ab !important;
+}
+
+.customSwitch-dark.ant-switch {
+  background-color: darkgray !important;
+}
+
+.customSwitch-dark.ant-switch-checked {
+  background-color: #1677ff !important;
+}
+
+.customSwitch-dark.ant-switch > .ant-switch-handle::before {
+  background-color: white !important;
+}
+
+.customRadioGroup-dark .ant-radio-button-wrapper {
+  background-color: #140032;
+  border-color: #140032;
+  color: white;
+}
+
+.customRadioGroup-dark .ant-radio-button-wrapper:hover {
+  background-color: #23053f;
+  color: #a39bb7;
+}
+
+.customRadioGroup-dark .ant-radio-button-wrapper-checked {
+  background-color: #8476ab !important;
+  border-color: #8476ab !important;
+}
+
+.customRadioGroup-dark .ant-radio-button-wrapper-checked::before {
+  background-color: #8476ab !important;
+}
+
+.customRadioGroup-dark .ant-radio-button-wrapper-checked:hover {
+  background-color: #a39bb7 !important;
+  border-color: #a39bb7 !important;
+}
+
+.customRadioGroup-dark .ant-radio-button-wrapper-checked:hover:before {
+  background-color: #a39bb7 !important;
+}
+
+.customRadioGroup-dark .ant-radio-button-wrapper::before {
+  background-color: #140032;
+  border-color: #140032;
+  color: white;
+}
+
+.customVidBackground-dark {
+  border-color: #140032;
+  background-color: #140032;
+}
+
+.customVidBorder-dark {
+  border-color: #140032;
+}
+
+/* Sign Up Pages */
+.customSignUpBorder-dark {
+  border-color: #a463ad;
+  background: #1e1d1f;
+}

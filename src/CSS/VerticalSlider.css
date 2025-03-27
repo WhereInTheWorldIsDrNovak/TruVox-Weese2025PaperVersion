@@ -1,0 +1,20 @@
+.VerticalSlider {
+  margin-left: 0 !important;
+  .ant-slider-rail {
+    width: 10px !important;
+  }
+  .ant-slider-track {
+    width: 10px !important;
+  }
+
+  .ant-slider-step {
+    width: 10px !important;
+  }
+
+  .ant-slider-vertical {
+    width: 10px !important;
+  }
+  .ant-slider-handle {
+    left: 3.7px;
+  }
+}

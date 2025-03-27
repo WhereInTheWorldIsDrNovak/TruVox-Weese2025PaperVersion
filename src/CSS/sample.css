@@ -1,0 +1,167 @@
+.layoutSample {
+  overflow: hidden;
+  background: transparent !important;
+}
+.color-block {
+  max-height: 20vw;
+}
+
+canvas {
+  display: block;
+  margin-left: 3vw;
+  background-color: rgb(255, 255, 255);
+}
+.currentSelection {
+  align-self: flex-start;
+  padding-left: 4%;
+  color: #4669c7;
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+}
+.yAxisArea {
+  width: 5vw;
+  transform: translateX(-2vw);
+  position: absolute;
+  /* align-items: center; */
+}
+.yAxisArea .yAxisLabel {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-items: flex-end;
+  color: #78a4e8;
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+  font-size: 1vw;
+}
+.yAxisArea .yAxisNumbers {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  /* padding: 0 5px; */
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  font-size: 0.8vw;
+  transform: translateY(-0.5vw);
+}
+
+.yAxisArea .yAxisLines {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 3vw;
+  transform: translateX(0.5vw);
+}
+
+.yAxisLines div {
+  border-top: 0.12vw solid black;
+}
+
+.blueAxis {
+  color: #78a4e8;
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+  position: absolute;
+  left: -1vw;
+  top: 0;
+  bottom: 0;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+  margin-top: 0;
+  font-size: 1vw;
+}
+
+.timeMarkerLine {
+  height: 0.8vw;
+  width: 0.1vw;
+  background-color: #000;
+  position: absolute;
+  top: 0;
+}
+.timeMarkerNum {
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700 !important;
+}
+
+.XAxisNum {
+  position: absolute;
+  left: 0;
+  display: flex;
+  justify-content: space-between;
+  font-size: 1vw;
+  margin-left: 3vw;
+  height: 2vw;
+}
+.XAxis {
+  display: flex;
+  justify-content: center;
+  margin-left: 3vw;
+  height: 4vw;
+  left: 0;
+  position: absolute;
+
+  color: #78a4e8;
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+  font-size: 1vw;
+}
+
+.slider {
+  position: relative;
+  top: -100px;
+  width: 100vw;
+}
+.lyric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80vw;
+  margin: 0 auto;
+}
+
+.lyric ul {
+  list-style-type: none;
+  padding: 0;
+  /* align-self: flex-start;
+    padding-left: 18vw;  */
+}
+
+.lyric li {
+  margin: 10px 0;
+}
+
+.lyric .lyric-light {
+  color: rgb(119, 116, 116);
+}
+
+.lyric .highlighted {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.lyric .highlighted-light {
+  color: rgb(24, 105, 5);
+}
+
+.ant-float-btn-content {
+  padding: 0 0 0 0;
+}
+
+.canvasMain {
+  margin-left: 0;
+}
+
+.ant-float-btn .ant-float-btn-body {
+  height: 100% !important;
+}

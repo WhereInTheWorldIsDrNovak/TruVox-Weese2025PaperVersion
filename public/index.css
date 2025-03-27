@@ -1,0 +1,17 @@
+html {
+  scrollbar-width: thin; /* Firefox */
+  /* scrollbar-color: blue green; Firefox */
+}
+
+/* Chrome, Edge, and Safari */
+body::-webkit-scrollbar {
+  width: 12px;
+}
+
+body::-webkit-scrollbar-track {
+  /* background: green; */
+}
+
+body::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+}

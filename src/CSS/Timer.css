@@ -1,0 +1,57 @@
+/* Timer.css */
+
+/* Container styles */
+.timer-container {
+  margin-top: 20px;
+}
+
+/* Timer styles */
+.timer {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* Recording indicator styles */
+.recording-indicator {
+  color: red;
+  font-weight: bold;
+}
+
+/* Slider container styles */
+.slider-container {
+  width: 75%;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+/* Results container styles */
+.results-container {
+  margin-top: 20px;
+}
+
+/* Statistic container styles */
+.statistic-container {
+  margin-top: 20px;
+}
+
+/* Statistic title styles */
+.statistic-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Statistic value styles */
+.statistic-value {
+  font-size: 18px;
+}
+
+/* Row styles */
+.row {
+  margin-top: 20px;
+}
+
+/* Column styles */
+.col {
+  padding: 0 10px;
+}

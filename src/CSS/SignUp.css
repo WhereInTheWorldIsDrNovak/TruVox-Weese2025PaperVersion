@@ -1,0 +1,25 @@
+.customSignUpBorder {
+    border: 8px solid;
+    border-radius: 30px;
+    height: 80vh;
+    width: 40vw;
+    justify-self: center;
+    margin-top: 3vh;
+}
+
+.customSignUpBorder-light {
+    border-color: #2b60a3;
+    background: white;
+}
+
+.list-item-success {
+    display: list-item;
+    list-style-type: "✅";
+    padding-inline-start: 1ch;
+}
+
+.list-item-error {
+    display: list-item;
+    list-style-type: "❌";
+    padding-inline-start: 1ch;
+}
