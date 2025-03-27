@@ -4,11 +4,13 @@ import useAudioRecorder from '../function/AudioRecorder';
 import {Button, Statistic, Slider, Typography, Col, Row} from 'antd';
 import './';
 
+interface AssessmentProps {}
+
 const {Paragraph} = Typography;
 const fontAlign = 'center';
 const fontSizePara = 17;
 
-const Assessment: React.FC = () => {
+const Assessment: React.FC<AssessmentProps> = () => {
   const [page, setPage] = useState<
     'intro' | 'recording1' | 'recording2' | 'survey' | 'results'
   >('intro');

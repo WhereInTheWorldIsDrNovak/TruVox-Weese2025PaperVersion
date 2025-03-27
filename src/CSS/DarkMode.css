@@ -48,7 +48,7 @@
 }
 
 .AvatarModal-dark .ant-modal-content button {
-  background-color: black;
+  background-color: black !important;
   border-color: black;
   color: white;
 }
@@ -503,10 +503,4 @@
 
 .customVidBorder-dark {
   border-color: #140032;
-}
-
-/* Sign Up Pages */
-.customSignUpBorder-dark {
-  border-color: #a463ad;
-  background: #1e1d1f;
 }

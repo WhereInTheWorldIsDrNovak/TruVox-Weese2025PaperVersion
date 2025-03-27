@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {map, drawBackground} from '../function/canvasDefault';
 import {Col, Row} from 'antd';
 import {CONFIG, COLORS, ThemeColors} from '../types/configTypes';
@@ -33,9 +33,7 @@ interface FixedProps {
   isRetry: boolean;
   setPlayingPause: () => void;
   divisor: number;
-  isPitchDynamicallyScaled: boolean;
   initialRange: number[];
-  setInitialRange: (rangeValue: number[]) => void;
   isListen: number;
   setIsListen: (num: number) => void;
   setMaxLyricCount: (num: number) => void;
@@ -49,9 +47,7 @@ const Fixed: React.FC<FixedProps> = ({
   setMaxLyricCount,
   setIsListen,
   isListen,
-  isPitchDynamicallyScaled,
   initialRange,
-  setInitialRange,
   divisor,
   isRetry,
   setPlayingPause,
@@ -72,19 +68,6 @@ const Fixed: React.FC<FixedProps> = ({
   themeColors,
   colorsMode,
 }) => {
-  const isMounted = useRef(false);
-  useEffect(() => {
-    isMounted.current = true;
-
-    return () => {
-      // This function is the cleanup, equivalent to componentWillUnmount
-      if (isMounted.current && isPitchDynamicallyScaled) {
-        setInitialRange([100, 300]);
-      }
-      isMounted.current = false;
-    };
-  }, []);
-
   const {
     pitch,
     setPitch,
@@ -309,6 +292,8 @@ const Fixed: React.FC<FixedProps> = ({
           const now = Date.now();
           const deltaTime = now - lastFrameTime;
           const elementsPerFrame = deltaTime * (CANVAS_WIDTH / maxMilliseconds); // Controls the speed that the curve lights up. Converts the change in time to a change in "elements" using a conversion factor based on the fact that CANVAS_WIDTH = maxMilliseconds.
+          console.log(deltaTime);
+          console.log(`Elements Per Frame: ${elementsPerFrame}`);
           for (
             let j = 0;
             j < elementsPerFrame && drawnUntil < pitchArray.length;
@@ -412,28 +397,18 @@ const Fixed: React.FC<FixedProps> = ({
   }, [playLyricCount, jsonFiles]);
 
   useEffect(() => {
-    const cachedData = localStorage.getItem('humanCurvePrecomputedData');
-
-    if (cachedData) {
-      const precomputedData = JSON.parse(cachedData);
-      if (precomputedData[gender] && precomputedData[gender][genderName]) {
-        const syllableData =
-          precomputedData[gender][genderName][syllableCount + 'syllable'];
-
-        if (syllableData) {
-          setMaxMilliseconds(syllableData.maxTime * 1000 * 1.2);
-          if (isPitchDynamicallyScaled) {
-            setInitialRange([
-              Math.max(0, syllableData.lowerBoundPitch - 20),
-              Math.min(syllableData.upperBoundPitch + 20, 600),
-            ]);
-          }
-        }
-      }
+    const longestTimes = localStorage.getItem('humanCurveLongestTimes');
+    if (longestTimes) {
+      const longestTimeSeconds =
+        JSON.parse(longestTimes)[gender][genderName][
+          syllableCount + 'syllable'
+        ];
+      const longestTimeMilliseconds = longestTimeSeconds * 1000;
+      setMaxMilliseconds(longestTimeMilliseconds * 1.2); // Adds a little extra space at the end to make up for inaccuracies in canvas curve rendering
     } else {
       (async () => {
         const url =
-          'https://ceas5.uc.edu/transvoice/jsonDataOm/precomputedHumanCurveData.json';
+          'https://ceas5.uc.edu/transvoice/jsonDataOm/precomputedLongestTimes.json';
         try {
           const response = await fetch(url);
           if (!response.ok) {
@@ -441,29 +416,15 @@ const Fixed: React.FC<FixedProps> = ({
           }
           const contentType = response.headers.get('content-type');
           if (contentType && contentType.includes('application/json')) {
-            const precomputedData = await response.json();
+            const longestTimes = await response.json();
             localStorage.setItem(
-              'humanCurvePrecomputedData',
-              JSON.stringify(precomputedData)
+              'humanCurveLongestTimes',
+              JSON.stringify(longestTimes)
             );
-
-            if (
-              precomputedData[gender] &&
-              precomputedData[gender][genderName]
-            ) {
-              const syllableData =
-                precomputedData[gender][genderName][syllableCount + 'syllable'];
-
-              if (syllableData) {
-                setMaxMilliseconds(syllableData.maxTime * 1000 * 1.2);
-                if (isPitchDynamicallyScaled) {
-                  setInitialRange([
-                    Math.max(0, syllableData.lowerBoundPitch - 20),
-                    Math.min(syllableData.upperBoundPitch + 20, 600),
-                  ]);
-                }
-              }
-            }
+            const longestTimeSeconds =
+              longestTimes[gender][genderName][syllableCount + 'syllable'];
+            const longestTimeMilliseconds = longestTimeSeconds * 1000;
+            setMaxMilliseconds(longestTimeMilliseconds * 1.2);
           }
         } catch (error) {
           console.error('Error fetching JSON data:', error);
@@ -502,7 +463,7 @@ const Fixed: React.FC<FixedProps> = ({
       .then(async data => {
         setJsonFiles(data.json_files);
 
-        const modifiedArray = data.base_filenames.map((element: string) =>
+        const modifiedArray = data.base_filenames.map((element: any) =>
           element.replaceAll('_', ' ')
         );
         setMaxLyricCount(data.base_filenames.length - 1);
@@ -598,12 +559,10 @@ const Fixed: React.FC<FixedProps> = ({
           0
         );
         const difference = Math.abs(mappedJsonValue - ballYtem);
-        const difference_threshold =
-          canvasHeight * (20 / (initialRange[1] - initialRange[0]));
         if (pitch > 1 && pitchArray[ctxdiv] !== 0) {
           tempPitchDiff.push(Math.abs(pitchArray[ctxdiv] - pitch));
         }
-        if (difference <= difference_threshold && !isNaN(difference)) {
+        if (difference <= 50 && !isNaN(difference)) {
           for (
             let j = ctxdiv - divisor;
             j <= ctxdiv + divisor && j < CanvasLength;
@@ -697,7 +656,7 @@ const Fixed: React.FC<FixedProps> = ({
                 className={`yAxisLines yAxisLines-${theme}`}
                 style={{height: canvasHeight}}
               >
-                {freqLabel?.map(() => <div></div>) ?? []}
+                {freqLabel?.map((_, index) => <div></div>) ?? []}
               </div>
             </Col>
           </Row>

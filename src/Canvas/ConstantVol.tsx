@@ -35,468 +35,475 @@ interface ConstantVolProps {
   colorsMode: string;
 }
 
-const ConstantVol = forwardRef<HTMLDivElement, ConstantVolProps>(props => {
-  const {
-    initialRange,
-    divisor,
-    ballPosition,
-    isRetry,
-    setPlayingPause,
-    COLORS,
-    config,
-    isPlaying,
-    size,
-    showNotesPar,
-    volume,
-    historyMode,
-    LAMP_COLORS,
-    handlePitchDiffChange,
-    enableAdvFeatures,
-    theme,
-    themeColors,
-    colorsMode,
-  } = props;
-  const {
-    pitch,
-    setPitch,
-    realVoiceColor,
-    targetVoiceColor,
-    closeVoiceColor,
-    currentVoiceColor,
-    ballYCurr,
-    canvasRef,
-    rectWidth,
-    CanvasLength,
-    canvasHeight,
-    setCanvasHeight,
-    showNotes,
-    setShowNotes,
-    notesLabel,
-    setNotesLabel,
-    freqLabel,
-    setFreqLabel,
-    pitchDiff,
-    setPitchDiff,
-    updateBallY,
-    updateCanvasHeight,
-    handleMouseMove,
-  } = useCanvasHooks(size, divisor, COLORS, initialRange);
+const ConstantVol = forwardRef<HTMLDivElement, ConstantVolProps>(
+  (props, ref) => {
+    const {
+      initialRange,
+      divisor,
+      ballPosition,
+      isRetry,
+      setPlayingPause,
+      COLORS,
+      config,
+      isPlaying,
+      size,
+      showNotesPar,
+      volume,
+      historyMode,
+      LAMP_COLORS,
+      handlePitchDiffChange,
+      enableAdvFeatures,
+      theme,
+      themeColors,
+      colorsMode,
+    } = props;
+    const {
+      pitch,
+      setPitch,
+      realVoiceColor,
+      targetVoiceColor,
+      closeVoiceColor,
+      currentVoiceColor,
+      ballYCurr,
+      canvasRef,
+      rectWidth,
+      CanvasLength,
+      canvasHeight,
+      setCanvasHeight,
+      showNotes,
+      setShowNotes,
+      notesLabel,
+      setNotesLabel,
+      freqLabel,
+      setFreqLabel,
+      pitchDiff,
+      setPitchDiff,
+      updateBallY,
+      updateCanvasHeight,
+      handleMouseMove,
+    } = useCanvasHooks(size, divisor, COLORS, initialRange);
 
-  const [pitchHistory, setPitchHistory] = useState<number[]>([0]);
+    const [pitchHistory, setPitchHistory] = useState<number[]>([0]);
 
-  const [CanvasLengthBall, setCanvasLengthBall] = useState<number>(
-    size[1] * ballPosition
-  );
-  const initialCustomHistoryFull = new Array(CanvasLength).fill(NaN);
-  const initialColorChangesFull = new Array(CanvasLength).fill(false);
-  const initialBallHistoryFull = new Array(CanvasLengthBall).fill(NaN);
-  const [customHistoryFull, setCustomHistoryFull] = useState<number[]>(
-    initialCustomHistoryFull
-  );
-  const [colorChangesFull, setColorChangesFull] = useState<boolean[]>(
-    initialColorChangesFull
-  );
-  const [ballHistoryFull, setBallHistoryFull] = useState<number[]>(
-    initialBallHistoryFull
-  );
-  const [ballSizeHistoryFull, setBallSizeHistoryFull] = useState<number[]>(
-    initialBallHistoryFull
-  );
-  const resetStatesFull = () => {
-    setCustomHistoryFull([...initialCustomHistoryFull]);
-    setColorChangesFull([...initialColorChangesFull]);
-    setBallHistoryFull([...initialBallHistoryFull]);
-    setBallSizeHistoryFull([...initialBallHistoryFull]);
-    setPitchDiff([0]);
-    handlePitchDiffChange([0]);
-  };
+    const [CanvasLengthBall, setCanvasLengthBall] = useState<number>(
+      size[1] * ballPosition
+    );
+    const initialCustomHistoryFull = new Array(CanvasLength).fill(NaN);
+    const initialColorChangesFull = new Array(CanvasLength).fill(false);
+    const initialBallHistoryFull = new Array(CanvasLengthBall).fill(NaN);
+    const [customHistoryFull, setCustomHistoryFull] = useState<number[]>(
+      initialCustomHistoryFull
+    );
+    const [colorChangesFull, setColorChangesFull] = useState<boolean[]>(
+      initialColorChangesFull
+    );
+    const [ballHistoryFull, setBallHistoryFull] = useState<number[]>(
+      initialBallHistoryFull
+    );
+    const [ballSizeHistoryFull, setBallSizeHistoryFull] = useState<number[]>(
+      initialBallHistoryFull
+    );
+    const resetStatesFull = () => {
+      setCustomHistoryFull([...initialCustomHistoryFull]);
+      setColorChangesFull([...initialColorChangesFull]);
+      setBallHistoryFull([...initialBallHistoryFull]);
+      setBallSizeHistoryFull([...initialBallHistoryFull]);
+      setPitchDiff([0]);
+      handlePitchDiffChange([0]);
+    };
 
-  const desiredLengthBallNum = Math.floor((size[1] / divisor) * ballPosition);
-  const [desiredLengthBall, setDesiredLengthBall] =
-    useState<number>(desiredLengthBallNum);
-  // isPlayingRef.current = isPlaying;
-  const [inputValue, setInputValue] = useState(1);
+    const desiredLengthBallNum = Math.floor((size[1] / divisor) * ballPosition);
+    const [desiredLengthBall, setDesiredLengthBall] =
+      useState<number>(desiredLengthBallNum);
+    // isPlayingRef.current = isPlaying;
+    const [inputValue, setInputValue] = useState(1);
 
-  const onChange = (newValue: number) => {
-    setInputValue(newValue);
-  };
+    const onChange = (newValue: number) => {
+      setInputValue(newValue);
+    };
 
-  // +++++++++++++++++++++++++++++++++++++++++++++++++
-  // Hooks useEffect parts \\
+    // +++++++++++++++++++++++++++++++++++++++++++++++++
+    // Hooks useEffect parts \\
 
-  // initialize get pitch function + pause + draw background
-  useCanvasInitializeGetPitch(
-    config,
-    setPitch,
-    updateCanvasHeight,
-    setPlayingPause,
-    canvasRef,
-    initialRange,
-    showNotes,
-    themeColors[theme][colorsMode].dashedLineColor
-  );
+    // initialize get pitch function + pause + draw background
+    useCanvasInitializeGetPitch(
+      config,
+      setPitch,
+      updateCanvasHeight,
+      setPlayingPause,
+      canvasRef,
+      initialRange,
+      showNotes,
+      themeColors[theme][colorsMode].dashedLineColor
+    );
 
-  // set canvas size for different resolutions
-  useCanvasAdjustHeight(canvasRef, setCanvasHeight);
+    // set canvas size for different resolutions
+    useCanvasAdjustHeight(canvasRef, setCanvasHeight);
 
-  // store current pitch
-  useCanvasUpdatePitch(isPlaying, pitch, updateBallY);
+    // store current pitch
+    useCanvasUpdatePitch(isPlaying, pitch, updateBallY);
 
-  // display current pitch
-  useCanvasCurrentPitch(
-    canvasRef,
-    pitch,
-    pitchHistory,
-    setPitchHistory,
-    initialRange,
-    themeColors[theme][colorsMode].textColor
-  );
+    // display current pitch
+    useCanvasCurrentPitch(
+      canvasRef,
+      pitch,
+      pitchHistory,
+      setPitchHistory,
+      initialRange,
+      themeColors[theme][colorsMode].textColor
+    );
 
-  // update pitchDiff text
-  useCanvasPitchDiff(
-    canvasRef,
-    pitchDiff,
-    initialRange,
-    enableAdvFeatures,
-    themeColors[theme][colorsMode].textColor
-  );
+    // update pitchDiff text
+    useCanvasPitchDiff(
+      canvasRef,
+      pitchDiff,
+      initialRange,
+      enableAdvFeatures,
+      themeColors[theme][colorsMode].textColor
+    );
 
-  // change Notes and hz display
-  useCanvasChangeHzAndNotes(
-    setShowNotes,
-    showNotes,
-    showNotesPar,
-    canvasRef,
-    initialRange,
-    setNotesLabel,
-    setFreqLabel,
-    canvasHeight,
-    themeColors[theme][colorsMode].dashedLineColor
-  );
+    // change Notes and hz display
+    useCanvasChangeHzAndNotes(
+      setShowNotes,
+      showNotes,
+      showNotesPar,
+      canvasRef,
+      initialRange,
+      setNotesLabel,
+      setFreqLabel,
+      canvasHeight,
+      themeColors[theme][colorsMode].dashedLineColor
+    );
 
-  // retry
-  useCanvasRetry(isRetry, divisor, setPlayingPause, resetStatesFull);
+    // retry
+    useCanvasRetry(isRetry, divisor, setPlayingPause, resetStatesFull);
 
-  // redraw background when hz or notes changed
-  useCanvasRedrawBackground(
-    canvasRef,
-    showNotesPar,
-    initialRange,
-    themeColors[theme][colorsMode].dashedLineColor
-  );
+    // redraw background when hz or notes changed
+    useCanvasRedrawBackground(
+      canvasRef,
+      showNotesPar,
+      initialRange,
+      themeColors[theme][colorsMode].dashedLineColor
+    );
 
-  // +++++++++++++++++++++++++++++++++++++++++++++++++
-  // Unique useEffect parts \\
+    // +++++++++++++++++++++++++++++++++++++++++++++++++
+    // Unique useEffect parts \\
 
-  useEffect(() => {
-    setDesiredLengthBall(Math.floor((size[1] / divisor) * ballPosition));
-    setCanvasLengthBall(Math.floor(size[1] * ballPosition));
-  }, [ballPosition, divisor]);
+    useEffect(() => {
+      setDesiredLengthBall(Math.floor((size[1] / divisor) * ballPosition));
+      setCanvasLengthBall(Math.floor(size[1] * ballPosition));
+    }, [ballPosition, divisor]);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      resetStatesFull();
-    }, 100);
-    return () => clearTimeout(timer);
-  }, [desiredLengthBall, CanvasLengthBall]);
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        resetStatesFull();
+      }, 100);
+      return () => clearTimeout(timer);
+    }, [desiredLengthBall, CanvasLengthBall]);
 
-  // Rendering balls and customization
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (canvas) {
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        // Clear the canvas
-        const textY = 20;
-        ctx.clearRect(235, 0, 980, canvas.height);
-        ctx.clearRect(0, textY + 3, canvas.width, canvas.height);
-        // Draw the background
-        drawBackground(
-          canvasRef,
-          initialRange[1],
-          initialRange[0],
-          showNotes,
-          themeColors[theme][colorsMode].dashedLineColor
-        );
+    // Rendering balls and customization
+    useEffect(() => {
+      const canvas = canvasRef.current;
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          // Clear the canvas
+          const textY = 20;
+          ctx.clearRect(235, 0, 980, canvas.height);
+          ctx.clearRect(0, textY + 3, canvas.width, canvas.height);
+          // Draw the background
+          drawBackground(
+            canvasRef,
+            initialRange[1],
+            initialRange[0],
+            showNotes,
+            themeColors[theme][colorsMode].dashedLineColor
+          );
 
-        // New: Draw the ball's historical positions
-        for (let i = 0; i < ballHistoryFull.length; i++) {
+          // New: Draw the ball's historical positions
+          for (let i = 0; i < ballHistoryFull.length; i++) {
+            ctx.beginPath();
+            const mappedValue = map(
+              ballHistoryFull[i],
+              initialRange[0],
+              initialRange[1],
+              size[0],
+              -1
+            );
+
+            let ballSize;
+            if (historyMode === 'Size' || historyMode === 'Mixed') {
+              if (ballSizeHistoryFull[i] < -80) {
+                ballSize = 3;
+              } else if (ballSizeHistoryFull[i] > -50) {
+                ballSize = 7;
+              } else {
+                ballSize = 5;
+              }
+            } else {
+              ballSize = 5;
+            }
+
+            let ballColor;
+            if (historyMode === 'Color' || historyMode === 'Mixed') {
+              if (ballSizeHistoryFull[i] < -80) {
+                ballColor = LAMP_COLORS[0];
+              } else if (ballSizeHistoryFull[i] > -50) {
+                ballColor = LAMP_COLORS[2];
+              } else {
+                ballColor = LAMP_COLORS[1];
+              }
+            } else {
+              ballColor = realVoiceColor;
+            }
+
+            ctx.arc(i, mappedValue, ballSize, 0, 2 * Math.PI);
+            ctx.fillStyle = ballColor;
+            ctx.fill();
+            ctx.closePath();
+          }
+
+          //Plot current value
           ctx.beginPath();
-          const mappedValue = map(
+          ctx.arc(size[1] * ballPosition, ballYCurr, 10, 0, 2 * Math.PI);
+          ctx.fillStyle = currentVoiceColor;
+          ctx.fill();
+          ctx.closePath();
+
+          for (let i = 0; i < customHistoryFull.length - 40; i++) {
+            ctx.beginPath();
+            const mappedJsonValue = map(
+              customHistoryFull[i],
+              initialRange[0],
+              initialRange[1],
+              size[0],
+              0
+            );
+
+            if (colorChangesFull[CanvasLength - i]) {
+              ctx.fillStyle = closeVoiceColor;
+            } else {
+              ctx.fillStyle = targetVoiceColor;
+            }
+
+            ctx.fillRect(
+              CanvasLength - i,
+              mappedJsonValue,
+              rectWidth,
+              rectWidth
+            );
+            ctx.fill();
+            ctx.closePath();
+          }
+          ctx.stroke();
+        }
+      }
+    }, [customHistoryFull, ballYCurr, initialRange]);
+
+    const updateBallHistoryFull = (pitch: number) => {
+      const tempHistoryFull = [...ballHistoryFull];
+
+      tempHistoryFull.splice(0, divisor);
+      for (let i = 0; i < divisor - 1; i++) {
+        tempHistoryFull.push(NaN);
+      }
+      tempHistoryFull.push(pitch);
+      setBallHistoryFull(tempHistoryFull);
+    };
+
+    const updateBallSizeHistoryFull = (volumeVal: number) => {
+      const tempHistoryFull = [...ballSizeHistoryFull];
+      tempHistoryFull.splice(0, divisor);
+      for (let i = 0; i < divisor - 1; i++) {
+        tempHistoryFull.push(NaN);
+      }
+      tempHistoryFull.push(volumeVal);
+      setBallSizeHistoryFull(tempHistoryFull);
+    };
+
+    const updateCustomHistoryFull = (inputValue: number) => {
+      const tempHistoryFull = [...customHistoryFull];
+      const tempPitchDiff = [...pitchDiff];
+
+      tempHistoryFull.splice(-divisor, divisor);
+      for (let i = 0; i < divisor; i++) {
+        tempHistoryFull.unshift(inputValue);
+      }
+      setCustomHistoryFull(tempHistoryFull);
+
+      setColorChangesFull(currentColors => {
+        const newColors = [...currentColors];
+        for (let i = 0; i < CanvasLengthBall; i++) {
+          const ballYtem = map(
             ballHistoryFull[i],
             initialRange[0],
             initialRange[1],
             size[0],
             -1
           );
+          if (!isNaN(ballHistoryFull[i])) {
+            const mappedJsonValue = map(
+              customHistoryFull[CanvasLength - i],
+              initialRange[0],
+              initialRange[1],
+              size[0],
+              0
+            );
 
-          let ballSize;
-          if (historyMode === 'Size' || historyMode === 'Mixed') {
-            if (ballSizeHistoryFull[i] < -80) {
-              ballSize = 3;
-            } else if (ballSizeHistoryFull[i] > -50) {
-              ballSize = 7;
+            const difference = Math.abs(mappedJsonValue - ballYtem);
+
+            if (difference <= 40 && !isNaN(difference)) {
+              for (
+                let j = i - divisor;
+                j <= i + divisor && j < CanvasLengthBall;
+                j++
+              ) {
+                newColors[j] = true;
+              }
+              i += divisor;
             } else {
-              ballSize = 5;
+              newColors[i] = false;
             }
           } else {
-            ballSize = 5;
+            newColors[i] = newColors[i - 1];
           }
-
-          let ballColor;
-          if (historyMode === 'Color' || historyMode === 'Mixed') {
-            if (ballSizeHistoryFull[i] < -80) {
-              ballColor = LAMP_COLORS[0];
-            } else if (ballSizeHistoryFull[i] > -50) {
-              ballColor = LAMP_COLORS[2];
-            } else {
-              ballColor = LAMP_COLORS[1];
-            }
-          } else {
-            ballColor = realVoiceColor;
-          }
-
-          ctx.arc(i, mappedValue, ballSize, 0, 2 * Math.PI);
-          ctx.fillStyle = ballColor;
-          ctx.fill();
-          ctx.closePath();
         }
-
-        //Plot current value
-        ctx.beginPath();
-        ctx.arc(size[1] * ballPosition, ballYCurr, 10, 0, 2 * Math.PI);
-        ctx.fillStyle = currentVoiceColor;
-        ctx.fill();
-        ctx.closePath();
-
-        for (let i = 0; i < customHistoryFull.length - 40; i++) {
-          ctx.beginPath();
-          const mappedJsonValue = map(
-            customHistoryFull[i],
-            initialRange[0],
-            initialRange[1],
-            size[0],
-            0
-          );
-
-          if (colorChangesFull[CanvasLength - i]) {
-            ctx.fillStyle = closeVoiceColor;
-          } else {
-            ctx.fillStyle = targetVoiceColor;
-          }
-
-          ctx.fillRect(CanvasLength - i, mappedJsonValue, rectWidth, rectWidth);
-          ctx.fill();
-          ctx.closePath();
-        }
-        ctx.stroke();
-      }
-    }
-  }, [customHistoryFull, ballYCurr, initialRange]);
-
-  const updateBallHistoryFull = (pitch: number) => {
-    const tempHistoryFull = [...ballHistoryFull];
-
-    tempHistoryFull.splice(0, divisor);
-    for (let i = 0; i < divisor - 1; i++) {
-      tempHistoryFull.push(NaN);
-    }
-    tempHistoryFull.push(pitch);
-    setBallHistoryFull(tempHistoryFull);
-  };
-
-  const updateBallSizeHistoryFull = (volumeVal: number) => {
-    const tempHistoryFull = [...ballSizeHistoryFull];
-    tempHistoryFull.splice(0, divisor);
-    for (let i = 0; i < divisor - 1; i++) {
-      tempHistoryFull.push(NaN);
-    }
-    tempHistoryFull.push(volumeVal);
-    setBallSizeHistoryFull(tempHistoryFull);
-  };
-
-  const updateCustomHistoryFull = (inputValue: number) => {
-    const tempHistoryFull = [...customHistoryFull];
-    const tempPitchDiff = [...pitchDiff];
-
-    tempHistoryFull.splice(-divisor, divisor);
-    for (let i = 0; i < divisor; i++) {
-      tempHistoryFull.unshift(inputValue);
-    }
-    setCustomHistoryFull(tempHistoryFull);
-
-    setColorChangesFull(currentColors => {
-      const newColors = [...currentColors];
-      for (let i = 0; i < CanvasLengthBall; i++) {
-        const ballYtem = map(
-          ballHistoryFull[i],
-          initialRange[0],
-          initialRange[1],
-          size[0],
-          -1
+        return newColors;
+      });
+      if (ballHistoryFull[CanvasLengthBall - 1] > 1) {
+        tempPitchDiff.push(
+          Math.abs(
+            customHistoryFull[CanvasLength - CanvasLengthBall] -
+              ballHistoryFull[CanvasLengthBall - 1]
+          )
         );
-        if (!isNaN(ballHistoryFull[i])) {
-          const mappedJsonValue = map(
-            customHistoryFull[CanvasLength - i],
-            initialRange[0],
-            initialRange[1],
-            size[0],
-            0
-          );
+      }
+      if (tempPitchDiff.length > 50) {
+        tempPitchDiff.shift();
+      }
+      setPitchDiff(tempPitchDiff);
+      handlePitchDiffChange(tempPitchDiff);
+    };
 
-          const difference = Math.abs(mappedJsonValue - ballYtem);
-          const difference_threshold =
-            canvasHeight * (20 / (initialRange[1] - initialRange[0]));
-          if (difference <= difference_threshold && !isNaN(difference)) {
-            for (
-              let j = i - divisor;
-              j <= i + divisor && j < CanvasLengthBall;
-              j++
-            ) {
-              newColors[j] = true;
-            }
-            i += divisor;
-          } else {
-            newColors[i] = false;
-          }
+    // Update custom history when input value changes
+    useEffect(() => {
+      if (isPlaying) {
+        updateCustomHistoryFull(inputValue);
+        if (pitch !== null) {
+          updateBallHistoryFull(pitch);
+          updateBallSizeHistoryFull(volume);
         } else {
-          newColors[i] = newColors[i - 1];
+          updateBallHistoryFull(0);
+          updateBallSizeHistoryFull(0);
         }
       }
-      return newColors;
-    });
-    if (ballHistoryFull[CanvasLengthBall - 1] > 1) {
-      tempPitchDiff.push(
-        Math.abs(
-          customHistoryFull[CanvasLength - CanvasLengthBall] -
-            ballHistoryFull[CanvasLengthBall - 1]
-        )
-      );
-    }
-    if (tempPitchDiff.length > 50) {
-      tempPitchDiff.shift();
-    }
-    setPitchDiff(tempPitchDiff);
-    handlePitchDiffChange(tempPitchDiff);
-  };
+    }, [isPlaying, pitch]);
 
-  // Update custom history when input value changes
-  useEffect(() => {
-    if (isPlaying) {
-      updateCustomHistoryFull(inputValue);
-      if (pitch !== null) {
-        updateBallHistoryFull(pitch);
-        updateBallSizeHistoryFull(volume);
-      } else {
-        updateBallHistoryFull(0);
-        updateBallSizeHistoryFull(0);
-      }
-    }
-  }, [isPlaying, pitch]);
-
-  return (
-    <Row
-      className="canvasMain"
-      style={{maxHeight: '27vw', marginBottom: '5vw', maxWidth: '100vw'}}
-    >
-      <Col span={1}></Col>
-      <Col span={22} style={{position: 'relative'}}>
-        <div className="yAxisArea" style={{height: canvasHeight}}>
-          <Row style={{height: canvasHeight}}>
-            <Col span={8}>
-              {showNotesPar ? (
+    return (
+      <Row
+        className="canvasMain"
+        style={{maxHeight: '27vw', marginBottom: '5vw', maxWidth: '100vw'}}
+      >
+        <Col span={1}></Col>
+        <Col span={22} style={{position: 'relative'}}>
+          <div className="yAxisArea" style={{height: canvasHeight}}>
+            <Row style={{height: canvasHeight}}>
+              <Col span={8}>
+                {showNotesPar ? (
+                  <div
+                    style={{height: canvasHeight}}
+                    className={`yAxisLabel yAxisLabel-${theme}`}
+                  >
+                    Pitch (Notes)
+                  </div>
+                ) : (
+                  <div
+                    style={{height: canvasHeight}}
+                    className={`yAxisLabel yAxisLabel-${theme}`}
+                  >
+                    Pitch (Hz)
+                  </div>
+                )}
+              </Col>
+              <Col span={8}>
                 <div
-                  style={{height: canvasHeight}}
-                  className={`yAxisLabel yAxisLabel-${theme}`}
+                  className={`yAxisNumbers yAxisNumbers-${theme}`}
+                  style={{height: canvasHeight * 1.039}}
                 >
-                  Pitch (Notes)
+                  {showNotesPar
+                    ? notesLabel?.map((note, index) => (
+                        <div key={index}>{note}</div>
+                      )) ?? []
+                    : freqLabel?.map((freq, index) => (
+                        <div key={index}>{freq}</div>
+                      )) ?? []}
                 </div>
-              ) : (
+              </Col>
+              <Col span={8}>
                 <div
+                  className={`yAxisLines yAxisLines-${theme}`}
                   style={{height: canvasHeight}}
-                  className={`yAxisLabel yAxisLabel-${theme}`}
                 >
-                  Pitch (Hz)
+                  {freqLabel?.map((_, index) => <div></div>) ?? []}
                 </div>
-              )}
-            </Col>
-            <Col span={8}>
-              <div
-                className={`yAxisNumbers yAxisNumbers-${theme}`}
-                style={{height: canvasHeight * 1.039}}
-              >
-                {showNotesPar
-                  ? notesLabel?.map((note, index) => (
-                      <div key={index}>{note}</div>
-                    )) ?? []
-                  : freqLabel?.map((freq, index) => (
-                      <div key={index}>{freq}</div>
-                    )) ?? []}
-              </div>
-            </Col>
-            <Col span={8}>
-              <div
-                className={`yAxisLines yAxisLines-${theme}`}
-                style={{height: canvasHeight}}
-              >
-                {freqLabel?.map(() => <div></div>) ?? []}
-              </div>
-            </Col>
-          </Row>
-        </div>
-        <div style={{height: canvasHeight}}>
-          <canvas
-            ref={canvasRef}
-            onMouseMove={handleMouseMove}
-            id="pitchCanvas"
-            className={`pitchCanvas-${theme}`}
-            width={size[1]}
-            height={size[0]}
-            style={{border: '1px solid #000'}}
-          ></canvas>
-          <div
-            className="XAxisNum"
-            style={{
-              top: canvasHeight,
-              width: canvasHeight * 3.486,
-            }}
-          >
-            {[...Array(11)].map((_, index) => (
-              <div key={index} style={{position: 'relative'}}>
-                <div className={`timeMarkerLine timeMarkerLine-${theme}`} />
-                <span className={`timeMarkerNum timeMarkerNum-${theme}`}>
-                  {((15 / (divisor / 4)) * (index / 10 - ballPosition)).toFixed(
-                    1
-                  )}
-                </span>
-              </div>
-            ))}
+              </Col>
+            </Row>
           </div>
-          <div
-            style={{
-              top: canvasHeight * 1.12,
-              width: canvasHeight * 3.486,
-            }}
-            className={`XAxis XAxis-${theme}`}
-          >
-            <div>Time (Seconds)</div>
+          <div style={{height: canvasHeight}}>
+            <canvas
+              ref={canvasRef}
+              onMouseMove={handleMouseMove}
+              id="pitchCanvas"
+              className={`pitchCanvas-${theme}`}
+              width={size[1]}
+              height={size[0]}
+              style={{border: '1px solid #000'}}
+            ></canvas>
+            <div
+              className="XAxisNum"
+              style={{
+                top: canvasHeight,
+                width: canvasHeight * 3.486,
+              }}
+            >
+              {[...Array(11)].map((_, index) => (
+                <div key={index} style={{position: 'relative'}}>
+                  <div className={`timeMarkerLine timeMarkerLine-${theme}`} />
+                  <span className={`timeMarkerNum timeMarkerNum-${theme}`}>
+                    {(
+                      (15 / (divisor / 4)) *
+                      (index / 10 - ballPosition)
+                    ).toFixed(1)}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <div
+              style={{
+                top: canvasHeight * 1.12,
+                width: canvasHeight * 3.486,
+              }}
+              className={`XAxis XAxis-${theme}`}
+            >
+              <div>Time (Seconds)</div>
+            </div>
           </div>
-        </div>
-      </Col>
-      <Col span={1}>
-        <div>
-          <Slider
-            vertical
-            min={initialRange[0]}
-            max={initialRange[1]}
-            style={{marginTop: 0, height: canvasHeight}}
-            onChange={onChange}
-            defaultValue={30}
-          />
-        </div>
-      </Col>
-    </Row>
-  );
-});
+        </Col>
+        <Col span={1}>
+          <div>
+            <Slider
+              vertical
+              min={initialRange[0]}
+              max={initialRange[1]}
+              style={{marginTop: 0, height: canvasHeight}}
+              onChange={onChange}
+              defaultValue={30}
+            />
+          </div>
+        </Col>
+      </Row>
+    );
+  }
+);
 
 export default ConstantVol;

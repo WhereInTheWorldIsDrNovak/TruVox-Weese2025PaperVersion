@@ -2,14 +2,6 @@ import React, {useState, useEffect} from 'react';
 import {IPitchDetectionConfig} from '../function/getPitch';
 import useInitializeGetPitch from '../hooksUseEffect/useInitializeGetPitch';
 import useAudioRecorder from '../function/AudioRecorder';
-
-import {Chart} from 'react-chartjs-2';
-import 'chartjs-chart-box-and-violin-plot/build/Chart.BoxPlot.js';
-import {Violin, ViolinController} from '@sgratzl/chartjs-chart-boxplot';
-import {Chart as ChartJS, registerables} from 'chart.js/auto';
-
-ChartJS.register(...registerables, ViolinController, Violin);
-
 import {
   Button,
   Statistic,
@@ -66,10 +58,6 @@ const Assessment: React.FC<AssessmentProps> = ({theme, enableAdvFeatures}) => {
   const [eMeanPitch, setEMeanPitch] = useState<number | null>(null);
   const [rainbowPitch, setRainbowPitch] = useState<number[]>([]);
   const [rainbowMeanPitch, setRainbowMeanPitch] = useState<number | null>(null);
-
-  const [, setFilePitches] = useState<number[]>([]);
-  const [, setFileAmp] = useState<number[]>([]);
-
   const {startRecording, stopRecording, recordedAudioURL} = useAudioRecorder();
   const [displayTimer, setDisplayTimer] = useState(false);
   const [recordingIndicator, setRecordingIndicator] = useState(false);
@@ -80,6 +68,9 @@ const Assessment: React.FC<AssessmentProps> = ({theme, enableAdvFeatures}) => {
   const [meanPitches, setMeanPitches] = useState<number[]>([]);
   const [overallMeanPitch, setOverallMeanPitch] = useState<number | null>(null);
 
+  const [pitchValues] = useState<number[]>([]);
+  const [, setMeanPitch] = useState<number | null>(null);
+
   const config: IPitchDetectionConfig = {
     SRATE: 44100,
     fxmin: 50,
@@ -88,11 +79,13 @@ const Assessment: React.FC<AssessmentProps> = ({theme, enableAdvFeatures}) => {
     fxmax: 600,
   };
 
-  // Constants
-  const thresholdLowFrequency = 75; // Pitch samples below this threshold will be dropped (consistent with PRAAT)
-  const thresholdHighFrequency = 600; // Pitch samples above this threshold willl be dropped (consistent with PRAAT)
-  const ampThreshold = 0.01; // Determines if a sample is loud enough to be considered a valid pitch sample
-  const countdown = 0; // Number of seconds for countdown (or 0 for no countdown)
+  useEffect(() => {
+    if (pitchValues.length > 0) {
+      const sum = pitchValues.reduce((acc, cur) => acc + cur, 0);
+      const mean = sum / pitchValues.length;
+      setMeanPitch(mean);
+    }
+  }, [pitchValues]);
 
   const handleFileChange = async (info: any) => {
     const uploadedFile = info.file.originFileObj;
@@ -203,7 +196,6 @@ const Assessment: React.FC<AssessmentProps> = ({theme, enableAdvFeatures}) => {
   ): Promise<number | null> => {
     const bufferSize = sampleRate / 100; // 100 pitch samples per second, consistent with PRAAT
     const pitches: number[] = [];
-    const amp: number[] = [];
 
     for (let i = 0; i < samples.length - bufferSize; i += bufferSize) {
       const sampleSlice = samples.slice(i, i + bufferSize);
@@ -211,7 +203,7 @@ const Assessment: React.FC<AssessmentProps> = ({theme, enableAdvFeatures}) => {
       const fxest = fxCalc.CalculateFx(sampleSlice, bufferSize); // Same autocorrelation function used in getPitch (getPitch streams from mic)
 
       if (
-        fxest.en > ampThreshold &&
+        fxest.en > 0 &&
         fxest.fx > thresholdLowFrequency &&
         fxest.fx < thresholdHighFrequency
       ) {
@@ -220,13 +212,9 @@ const Assessment: React.FC<AssessmentProps> = ({theme, enableAdvFeatures}) => {
           pitches.push(randomtem);
         } else {
           pitches.push(fxest.fx);
-          amp.push(fxest.en);
         }
       }
     }
-
-    setFilePitches(pitches);
-    setFileAmp(amp);
 
     // Calculate mean pitch
     if (pitches.length > 0) {
@@ -244,6 +232,10 @@ const Assessment: React.FC<AssessmentProps> = ({theme, enableAdvFeatures}) => {
 
   // Get Pitch Function
   useInitializeGetPitch(config, setPitch);
+
+  const thresholdLowFrequency = 75; // Pitch samples below this threshold will be dropped (consistent with PRAAT)
+  const thresholdHighFrequency = 600; // Pitch samples above this threshold willl be dropped (consistent with PRAAT)
+  const countdown = 0; // Number of seconds for countdown (or 0 for no countdown)
 
   useEffect(() => {
     if (isRecording && !isStopped) {
@@ -268,6 +260,8 @@ const Assessment: React.FC<AssessmentProps> = ({theme, enableAdvFeatures}) => {
           return prevRainbowPitch ? [...prevRainbowPitch, pitch] : [pitch];
         });
       }
+    } else {
+      //console.log("Pitch collection stopped...")
     }
   }, [pitch]);
 
@@ -297,16 +291,16 @@ const Assessment: React.FC<AssessmentProps> = ({theme, enableAdvFeatures}) => {
       // When finished recording, calculate average
 
       if (ePitch !== null) {
+        // Do threshold filter here?
         setEMeanPitch(ePitch.reduce((a, b) => a + b, 0) / ePitch.length);
         console.log('E Pitch Avg: ' + eMeanPitch);
-        console.log(calculateBoxPlotData(ePitch));
       }
       if (rainbowPitch !== null) {
+        // Do threshold filter here?
         setRainbowMeanPitch(
           rainbowPitch.reduce((a, b) => a + b, 0) / rainbowPitch.length
         );
         console.log('Rainbow Pitch Avg: ' + rainbowMeanPitch);
-        console.log(calculateBoxPlotData(rainbowPitch));
       }
     }
 
@@ -425,107 +419,6 @@ const Assessment: React.FC<AssessmentProps> = ({theme, enableAdvFeatures}) => {
   const formattedMinutes = String(minutes).padStart(2, '0');
   const formattedSeconds = String(remainingSeconds).padStart(2, '0');
 
-  function calculateBoxPlotData(data: number[]) {
-    const calculateMedian = (arr: number[]): number => {
-      const mid = Math.floor(arr.length / 2);
-      if (arr.length % 2 === 0) {
-        return (arr[mid - 1] + arr[mid]) / 2;
-      }
-      return arr[mid];
-    };
-
-    const calculateQuartile = (arr: number[], q: number): number => {
-      const index = (arr.length + 1) * q;
-      if (index % 1 === 0) {
-        return arr[index - 1];
-      }
-      const lower = arr[Math.floor(index) - 1];
-      const upper = arr[Math.floor(index)];
-      return (lower + upper) / 2;
-    };
-
-    // Sort and get mean
-    const sortedData = [...data].sort((a, b) => a - b);
-    const mean = data.reduce((acc, num) => acc + num, 0) / data.length;
-
-    // Calculate Q1 & Q3
-    const q1 = calculateQuartile(sortedData, 0.25);
-    const q3 = calculateQuartile(sortedData, 0.75);
-
-    // Calculate IQR
-    const iqr = q3 - q1;
-
-    // Calculate Outliers
-    const lowerBound = q1 - 1.5 * iqr;
-    const upperBound = q3 + 1.5 * iqr;
-    const outliers = data.filter(num => num < lowerBound || num > upperBound);
-
-    // Median, min, max
-    const median = calculateMedian(sortedData);
-    const min = sortedData[0];
-    const max = sortedData[data.length - 1];
-
-    return {
-      mean,
-      median,
-      q1,
-      q3,
-      min,
-      max,
-      outliers,
-    };
-  }
-
-  const boxplotData = {
-    labels: ['Pitch'],
-    backgroundColor: 'rgba(255,0,0,0.5)',
-    datasets: [
-      {
-        label: "'EEE' Pitch",
-        backgroundColor: 'rgba(255,0,0,.5)',
-        borderColor: 'red',
-        borderWidth: 1,
-        outlierColor: '#000000',
-        itemRadius: 2,
-        itemBackgroudColor: '#000',
-        padding: 10,
-        data: [
-          ePitch.filter(
-            n => !calculateBoxPlotData(ePitch).outliers.includes(n)
-          ),
-        ],
-        outliers: calculateBoxPlotData(ePitch).outliers,
-      },
-      {
-        label: 'Rainbow Pitch',
-        backgroundColor: 'rgba(0,0,255,0.5)',
-        borderColor: 'blue',
-        borderWidth: 1,
-        outlierColor: '#000000',
-        itemRadius: 2,
-        itemBackgroudColor: '#000',
-        padding: 10,
-        data: [
-          rainbowPitch.filter(
-            n => !calculateBoxPlotData(rainbowPitch).outliers.includes(n)
-          ),
-        ],
-        outliers: calculateBoxPlotData(rainbowPitch).outliers,
-      },
-    ],
-    options: {
-      animation: false,
-      scales: {
-        y: {
-          text: 'Pitch',
-          type: 'linear',
-          min: thresholdLowFrequency,
-          max: thresholdHighFrequency,
-        },
-      },
-    },
-  };
-
   return (
     <div
       style={{
@@ -605,13 +498,7 @@ const Assessment: React.FC<AssessmentProps> = ({theme, enableAdvFeatures}) => {
 
             {/* Display Mean Pitches and Overall Mean Pitch */}
             {meanPitches.length > 0 && (
-              <div
-                style={{
-                  marginTop: '20px',
-                  marginBottom: '200px',
-                  textAlign: 'center',
-                }}
-              >
+              <div style={{marginTop: '20px', textAlign: 'center'}}>
                 <Typography.Title level={4}>
                   Mean Pitch Values per 10-Second Intervals:
                 </Typography.Title>
@@ -627,19 +514,6 @@ const Assessment: React.FC<AssessmentProps> = ({theme, enableAdvFeatures}) => {
                 <Typography.Title level={4}>
                   Overall Mean Pitch: {overallMeanPitch?.toFixed(2)} Hz
                 </Typography.Title>
-                <div
-                  style={{
-                    marginTop: '10px',
-                    marginBottom: '10px',
-                    marginLeft: '100px',
-                    marginRight: '100px',
-                  }}
-                >
-                  {/* {true && (
-                  //  This feature is currently disabled for breaking the UI, but should be added back in the future
-                  <Chart type="bubble" data={bubbleData} height={200} width={600}/>
-                )} */}
-                </div>
               </div>
             )}
           </Typography>
@@ -1215,9 +1089,6 @@ const Assessment: React.FC<AssessmentProps> = ({theme, enableAdvFeatures}) => {
               </Button>
             </div>
           </Typography>
-          <div>
-            <Chart type="violin" data={boxplotData} height={400} width={300} />
-          </div>
         </div>
       )}
 

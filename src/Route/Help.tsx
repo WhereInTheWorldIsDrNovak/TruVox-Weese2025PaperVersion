@@ -3,7 +3,6 @@ import {useNavigate} from 'react-router-dom';
 import type {CollapseProps} from 'antd';
 import {Collapse, Button, Anchor, Divider, Typography, Col, Row} from 'antd';
 import {useTemString} from '../hooks/useTemString';
-import SmoothScrollButton from '../function/SmoothScroll';
 
 interface HelpProps {
   theme: string;
@@ -92,18 +91,11 @@ function items_2(theme: string): CollapseProps['items'] {
           more feminine, whereas a more backward resonance (when the back of the
           mouth and throat constricts), is perceived as more masculine. The
           combination of increased pitch and forward resonance results in the
-          strongest perception of a feminine voice
-          <sup>
-            <SmoothScrollButton targetId="part-2-5">[2]</SmoothScrollButton>
-          </sup>
-          . Our research also shows that transfeminine people are very
-          interested in software for gender-affirming voice training, want it to
-          focus on both pitch and resonance, and have many recommendations for
-          useful features
-          <sup>
-            <SmoothScrollButton targetId="part-2-5">[3]</SmoothScrollButton>
-          </sup>
-          .
+          strongest perception of a feminine voice (Whiteside, 1998). Our
+          research also shows that transfeminine people are very interested in
+          software for gender-affirming voice training, want it to focus on both
+          pitch and resonance, and have many recommendations for useful features
+          (Bush et al., 2024).
         </Paragraph>
       ),
     },
@@ -127,14 +119,10 @@ function items_2(theme: string): CollapseProps['items'] {
         >
           Our previous research has found that transfeminine people who
           completed voice therapy showed an average increase in vocal pitch by
-          half an octave
-          <sup>
-            <SmoothScrollButton targetId="part-2-5">[1]</SmoothScrollButton>
-          </sup>
-          . They also changed their articulation patterns so that the tongue was
-          placed more forward in the mouth to facilitate a forward resonance.
-          Targeting pitch and resonance may assist in increasing vocal
-          femininity.
+          half an octave (Gustin et al., 2022). They also changed their
+          articulation patterns so that the tongue was placed more forward in
+          the mouth to facilitate a forward resonance. Targeting pitch and
+          resonance may assist in increasing vocal femininity.
         </Paragraph>
       ),
     },
@@ -202,7 +190,7 @@ function items_2(theme: string): CollapseProps['items'] {
 const Help: React.FC<HelpProps> = ({theme}) => {
   const navigate = useNavigate();
   const {items_3} = useTemString(theme, fontSizePara, fontSizeTitle);
-  const goToTour = () => {
+  const goToSample = () => {
     navigate('/pitch?init=true');
   };
 
@@ -256,14 +244,14 @@ const Help: React.FC<HelpProps> = ({theme}) => {
                 title: 'Pitch module',
                 children: [
                   {
+                    key: 'part-3-1',
+                    href: '#part-3-1',
+                    title: 'Settings',
+                  },
+                  {
                     key: 'part-3-2',
                     href: '#part-3-2',
                     title: 'Constant exercise',
-                  },
-                  {
-                    key: 'part-3-6',
-                    href: '#part-3-6',
-                    title: 'Chanting exercise',
                   },
                   {
                     key: 'part-3-3',
@@ -271,19 +259,19 @@ const Help: React.FC<HelpProps> = ({theme}) => {
                     title: 'Stair exercise',
                   },
                   {
-                    key: 'part-3-5',
-                    href: '#part-3-5',
-                    title: 'Human Curve exercise',
-                  },
-                  {
                     key: 'part-3-4',
                     href: '#part-3-4',
                     title: 'Heteronyms exercise',
                   },
                   {
-                    key: 'part-3-1',
-                    href: '#part-3-1',
-                    title: 'Settings',
+                    key: 'part-3-5',
+                    href: '#part-3-5',
+                    title: 'Human Curve exercise',
+                  },
+                  {
+                    key: 'part-3-6',
+                    href: '#part-3-6',
+                    title: 'Chanting exercise',
                   },
                   {
                     key: 'part-3-7',
@@ -352,7 +340,7 @@ const Help: React.FC<HelpProps> = ({theme}) => {
               Videos, and About tabs above.
             </Paragraph>
             <Button
-              onClick={goToTour}
+              onClick={goToSample}
               className={`customGradientButton-${theme}`}
               type="primary"
               style={{
@@ -418,9 +406,9 @@ const Help: React.FC<HelpProps> = ({theme}) => {
               By default, the module starts in the Constant exercise. The
               Settings menu can be accessed using the button below the
               Start/Pause button or using the gear icon on the bottom right. The
-              menu allows you to choose between five exercises (Constant,
-              Chanting, Stair, Human Curve, and Heteronyms) as well as change
-              several settings.
+              menu allows you to choose between five exercises (Constant, Stair,
+              Heteronyms, Human Curve, and Chanting) as well as change several
+              settings.
             </Paragraph>
             <Collapse
               defaultActiveKey={[]}

@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {map, drawBackground} from '../function/canvasDefault';
 import {Col, Row} from 'antd';
 import {CONFIG, COLORS, ThemeColors} from '../types/configTypes';
@@ -35,9 +35,7 @@ interface HeteronymProps {
   isRetry: boolean;
   setPlayingPause: () => void;
   divisor: number;
-  isPitchDynamicallyScaled: boolean;
   initialRange: number[];
-  setInitialRange: (rangeValue: number[]) => void;
   isListen: number;
   setIsListen: (num: number) => void;
   setMaxLyricCount: (num: number) => void;
@@ -51,9 +49,7 @@ const Heteronym: React.FC<HeteronymProps> = ({
   setMaxLyricCount,
   setIsListen,
   isListen,
-  isPitchDynamicallyScaled,
   initialRange,
-  setInitialRange,
   divisor,
   isRetry,
   setPlayingPause,
@@ -75,19 +71,6 @@ const Heteronym: React.FC<HeteronymProps> = ({
   themeColors,
   colorsMode,
 }) => {
-  const isMounted = useRef(false);
-  useEffect(() => {
-    isMounted.current = true;
-
-    return () => {
-      // This function is the cleanup, equivalent to componentWillUnmount
-      if (isMounted.current && isPitchDynamicallyScaled) {
-        setInitialRange([100, 300]);
-      }
-      isMounted.current = false;
-    };
-  }, []);
-
   const {
     pitch,
     setPitch,
@@ -519,12 +502,10 @@ const Heteronym: React.FC<HeteronymProps> = ({
           0
         );
         const difference = Math.abs(mappedJsonValue - ballYtem);
-        const difference_threshold =
-          canvasHeight * (25 / (initialRange[1] - initialRange[0]));
         if (pitch > 1 && pitchArray[ctxdiv] !== 0) {
           tempPitchDiff.push(Math.abs(pitchArray[ctxdiv] - pitch));
         }
-        if (difference <= difference_threshold && !isNaN(difference)) {
+        if (difference <= 50 && !isNaN(difference)) {
           for (
             let j = ctxdiv - divisor;
             j <= ctxdiv + divisor && j < CanvasLength;
@@ -565,31 +546,16 @@ const Heteronym: React.FC<HeteronymProps> = ({
   }, [isPlaying]);
 
   useEffect(() => {
-    const cachedData = localStorage.getItem('heteroPrecomputedData');
-
-    if (cachedData) {
-      const precomputedData = JSON.parse(cachedData);
-      if (precomputedData[gender] && precomputedData[gender][genderName]) {
-        const longestTimeSeconds =
-          precomputedData[gender][genderName][type][num]['maxTime'];
-        const minPitch =
-          precomputedData[gender][genderName][type][num]['lowerBoundPitch'];
-        const maxPitch =
-          precomputedData[gender][genderName][type][num]['upperBoundPitch'];
-
-        const longestTimeMilliseconds = longestTimeSeconds * 1000;
-        setMaxMilliseconds(longestTimeMilliseconds * 1.2);
-        if (isPitchDynamicallyScaled) {
-          setInitialRange([
-            Math.max(0, minPitch - 20),
-            Math.min(maxPitch + 20, 600),
-          ]);
-        }
-      }
+    const longestTimes = localStorage.getItem('heteroLongestTimes');
+    if (longestTimes) {
+      const longestTimeSeconds =
+        JSON.parse(longestTimes)[gender][genderName][type][num];
+      const longestTimeMilliseconds = longestTimeSeconds * 1000;
+      setMaxMilliseconds(longestTimeMilliseconds * 1.2); // Adds a little extra space at the end to make up for inaccuracies in canvas curve rendering
     } else {
       (async () => {
         const url =
-          'https://ceas5.uc.edu/transvoice/heteroJsonData/precomputedHeteroData.json';
+          'https://ceas5.uc.edu/transvoice/heteroJsonData/precomputedLongestTimes.json';
         try {
           const response = await fetch(url);
           if (!response.ok) {
@@ -597,36 +563,17 @@ const Heteronym: React.FC<HeteronymProps> = ({
           }
           const contentType = response.headers.get('content-type');
           if (contentType && contentType.includes('application/json')) {
-            const precomputedData = await response.json();
+            const longestTimes = await response.json();
             localStorage.setItem(
-              'heteroPrecomputedData',
-              JSON.stringify(precomputedData)
+              'heteroLongestTimes',
+              JSON.stringify(longestTimes)
             );
-
-            if (
-              precomputedData[gender] &&
-              precomputedData[gender][genderName]
-            ) {
-              const longestTimeSeconds =
-                precomputedData[gender][genderName][type][num]['maxTime'];
-              const minPitch =
-                precomputedData[gender][genderName][type][num][
-                  'lowerBoundPitch'
-                ];
-              const maxPitch =
-                precomputedData[gender][genderName][type][num][
-                  'upperBoundPitch'
-                ];
-
-              const longestTimeMilliseconds = longestTimeSeconds * 1000;
-              setMaxMilliseconds(longestTimeMilliseconds * 1.2);
-              if (isPitchDynamicallyScaled) {
-                setInitialRange([
-                  Math.max(0, minPitch - 20),
-                  Math.min(maxPitch + 20, 600),
-                ]);
-              }
-            }
+            const longestTimeSeconds =
+              longestTimes[gender][genderName][type][num];
+            const longestTimeMilliseconds = longestTimeSeconds * 1000;
+            setMaxMilliseconds(longestTimeMilliseconds * 1.2);
+            console.log('Else Fetch');
+            console.log('MaxMilliSec ', maxMilliseconds);
           }
         } catch (error) {
           console.error('Error fetching JSON data:', error);
@@ -677,7 +624,7 @@ const Heteronym: React.FC<HeteronymProps> = ({
                 className={`yAxisLines yAxisLines-${theme}`}
                 style={{height: canvasHeight}}
               >
-                {freqLabel?.map(() => <div></div>) ?? []}
+                {freqLabel?.map((_, index) => <div></div>) ?? []}
               </div>
             </Col>
           </Row>

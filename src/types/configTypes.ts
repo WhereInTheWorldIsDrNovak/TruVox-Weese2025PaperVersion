@@ -22,15 +22,3 @@ export interface ThemeColors {
     [key: string]: COLORS;
   };
 }
-
-export interface Validation {
-  type:
-    | 'regex_match'
-    | 'regex_test'
-    | 'string_includes'
-    | 'string_match'
-    | 'length';
-  argument: RegExp | string[] | string | number;
-  errMessage: string;
-  tooltipDesc?: string | undefined;
-}

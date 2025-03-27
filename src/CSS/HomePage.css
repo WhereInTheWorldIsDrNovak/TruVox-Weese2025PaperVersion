@@ -86,7 +86,7 @@
   margin-bottom: 35px;
 }
 
-.modules-title {
+.exercises-title {
   text-decoration: underline;
   text-decoration-skip-ink: auto;
   text-underline-offset: 10px;
@@ -114,20 +114,16 @@
 }
 
 .pitch-training-card {
-  border-color: #bbcce9 !important;
+  border-color: #8daada !important;
 }
 
 .pitch-volume-card {
-  border-color: #8daada !important;
+  border-color: #436ac2 !important;
   margin: 0;
 }
 
-.video-card {
-  border-color: #436ac2 !important;
-}
-
 .assessment-card {
-  border-color: #8376aa !important;
+  border-color: purple !important;
 }
 
 .card-number {
@@ -138,14 +134,10 @@
 }
 
 .pitch-number {
-  color: #bbcce9 !important;
-}
-
-.volume-number {
   color: #8daada !important;
 }
 
-.video-number {
+.volume-number {
   color: #436ac2 !important;
 }
 
@@ -158,14 +150,10 @@
 }
 
 .pitch-title {
-  color: #bbcce9 !important;
-}
-
-.volume-title {
   color: #8daada !important;
 }
 
-.video-title {
+.volume-title {
   color: #436ac2 !important;
 }
 

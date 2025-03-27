@@ -1,4 +1,4 @@
-import {useEffect, RefObject} from 'react';
+import {useEffect, useRef, RefObject} from 'react';
 import {map} from '../function/canvasDefault';
 
 // const canvasRef = useRef<HTMLCanvasElement>(null);

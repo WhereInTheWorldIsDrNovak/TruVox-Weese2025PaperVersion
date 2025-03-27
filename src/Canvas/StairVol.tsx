@@ -376,12 +376,10 @@ const Stair: React.FC<StairProps> = ({
           0
         );
         const difference = Math.abs(mappedJsonValue - ballYtem);
-        const difference_threshold =
-          canvasHeight * (25 / (initialRange[1] - initialRange[0]));
         if (pitch > 1) {
           tempPitchDiff.push(Math.abs(pitchArrayCus[ctxdiv] - pitch));
         }
-        if (difference <= difference_threshold && !isNaN(difference)) {
+        if (difference <= 50 && !isNaN(difference)) {
           for (
             let j = ctxdiv - divisor;
             j <= ctxdiv + divisor && j < CanvasLength;
@@ -477,7 +475,7 @@ const Stair: React.FC<StairProps> = ({
                 className={`yAxisLines yAxisLines-${theme}`}
                 style={{height: canvasHeight}}
               >
-                {freqLabel?.map(() => <div></div>) ?? []}
+                {freqLabel?.map((_, index) => <div></div>) ?? []}
               </div>
             </Col>
           </Row>

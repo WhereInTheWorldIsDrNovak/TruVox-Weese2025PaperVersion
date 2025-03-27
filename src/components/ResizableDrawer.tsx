@@ -21,7 +21,7 @@ const ResizableDrawer = ({children, ...props}: any) => {
     setDrawerWidth(props.width);
   }, [props.visible]);
 
-  function handleMouseup() {
+  function handleMouseup(e: any) {
     if (!isResizing) {
       return;
     }

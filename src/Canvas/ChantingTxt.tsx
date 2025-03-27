@@ -6,22 +6,11 @@ import React, {
   useState,
 } from 'react';
 import {map, drawBackground} from '../function/canvasDefault';
-import {
-  Slider,
-  Button,
-  Typography,
-  Row,
-  Col,
-  Space,
-  Tooltip,
-  Switch,
-} from 'antd';
+import {Slider, Button, Typography, Row, Col, Space} from 'antd';
 import '../CSS/VerticalSlider.css';
 import {useCanvasHooks} from '../hooks/useCanvasHooks';
 
-import * as Tone from 'tone';
-
-import useCanvasCurrentPitch from '../hooksUseEffect/useCanvasCurrentPitch';
+import useCanvasMouseText from '../hooksUseEffect/useCanvasMouseText';
 import useCanvasRetry from '../hooksUseEffect/useCanvasRetry';
 import useCanvasUpdatePitch from '../hooksUseEffect/useCanvasUpdatePitch';
 import useCanvasAdjustHeight from '../hooksUseEffect/useCanvasAdjustHeight';
@@ -34,7 +23,6 @@ import {COLORS, ThemeColors} from '../types/configTypes';
 
 const {Title} = Typography;
 
-const defaultSliderValue = 200;
 interface ChantingTxtProps {
   initialRange: number[];
   divisor: number;
@@ -91,6 +79,7 @@ const ChantingTxt = forwardRef<HTMLDivElement, ChantingTxtProps>(
     const {
       pitch,
       setPitch,
+      mouseHeight,
       realVoiceColor,
       targetVoiceColor,
       closeVoiceColor,
@@ -116,7 +105,7 @@ const ChantingTxt = forwardRef<HTMLDivElement, ChantingTxtProps>(
 
     const ref4 = useRef<HTMLDivElement>(null);
     useImperativeHandle(ref, () => ref4.current as HTMLDivElement);
-    const [inputValue, setInputValue] = useState(defaultSliderValue); // Initialize target pitch at 200 Hz
+    const [inputValue, setInputValue] = useState(200); // Initialize target pitch at 200 Hz
 
     const [chantingActualPitch, setChantingActualPitch] = useState<number[]>(
       []
@@ -124,13 +113,7 @@ const ChantingTxt = forwardRef<HTMLDivElement, ChantingTxtProps>(
     const [chantingMeanPitch, setChantingMeanPitch] = useState<number | null>(
       null
     );
-    const [currentSentenceIndex] = useState(1);
-
-    // Pitch Generator
-    const [isPitchPlaying, setIsPitchPlaying] = useState<boolean>(false);
-    const [audioPitchVal, setAudioPitchVal] =
-      useState<Tone.Unit.Frequency>(defaultSliderValue); // Set Tone to low pitch val
-    const [synth, setSynth] = useState<Tone.Synth>();
+    const [currentSentenceIndex, setCurrentSentenceIndex] = useState(1);
 
     // Initialization curve
     const [CanvasLengthBall] = useState<number>(size[1] * ballPosition);
@@ -153,12 +136,10 @@ const ChantingTxt = forwardRef<HTMLDivElement, ChantingTxtProps>(
       setPitchDiff([0]);
     };
 
-    const [pitchHistory, setPitchHistory] = useState<number[]>([]);
-
     const onChangeSlider = (newValue: number) => {
       setInputValue(newValue);
-      setAudioPitchVal(newValue);
     };
+
     // +++++++++++++++++++++++++++++++++++++++++++++++++
     // Hooks useEffect parts \\
 
@@ -180,12 +161,10 @@ const ChantingTxt = forwardRef<HTMLDivElement, ChantingTxtProps>(
     // store current pitch
     useCanvasUpdatePitch(isPlaying, pitch, updateBallY);
 
-    // display current pitch
-    useCanvasCurrentPitch(
+    // update mouse text
+    useCanvasMouseText(
       canvasRef,
-      pitch,
-      pitchHistory,
-      setPitchHistory,
+      mouseHeight,
       initialRange,
       themeColors[theme][colorsMode].textColor
     );
@@ -571,30 +550,6 @@ const ChantingTxt = forwardRef<HTMLDivElement, ChantingTxtProps>(
       }
     }, [chantingStep]);
 
-    useEffect(() => {
-      if (synth) {
-        synth.triggerRelease();
-      }
-      if (isPitchPlaying) {
-        const synthTemp = new Tone.Synth().toDestination();
-        setSynth(synthTemp);
-        synthTemp?.triggerAttack(audioPitchVal);
-      }
-    }, [audioPitchVal]);
-
-    useEffect(() => {
-      if (!isPitchPlaying || isPlaying) {
-        if (synth) {
-          synth.triggerRelease();
-          setIsPitchPlaying(false);
-        }
-      } else {
-        const synthTemp = new Tone.Synth().toDestination();
-        setSynth(synthTemp);
-        synthTemp?.triggerAttack(audioPitchVal);
-      }
-    }, [isPitchPlaying, isPlaying]);
-
     return (
       <div>
         <Row
@@ -705,18 +660,6 @@ const ChantingTxt = forwardRef<HTMLDivElement, ChantingTxtProps>(
                   tooltip={{placement: 'top'}}
                 />
               </div>
-              <Tooltip title="If enabled, a sound will play at the target pitch for each step">
-                <Switch
-                  defaultChecked={isPitchPlaying}
-                  onChange={setIsPitchPlaying}
-                  disabled={isPlaying}
-                  checked={!isPlaying && isPitchPlaying}
-                  checkedChildren="🎵"
-                  unCheckedChildren="🎵"
-                  style={{rotate: '90deg'}}
-                  className={`customSwitch-${theme}`}
-                />
-              </Tooltip>
             </Space>
           </Col>
         </Row>

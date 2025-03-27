@@ -1,5 +1,5 @@
 import {useEffect, RefObject} from 'react';
-import {getPitch} from '../function/getPitch';
+import {getPitch, IPitchDetectionConfig} from '../function/getPitch';
 import {CONFIG} from '../types/configTypes';
 import {drawBackground} from '../function/canvasDefault';
 

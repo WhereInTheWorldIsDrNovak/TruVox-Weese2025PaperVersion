@@ -1,12 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {map, drawBackground} from '../function/canvasDefault';
-import {Col, Row, Slider, Space, Switch, Tooltip} from 'antd';
+import {Col, Row, Slider, Space} from 'antd';
 
 import {CONFIG, COLORS, ThemeColors} from '../types/configTypes'; // types
 import {useCanvasHooks} from '../hooks/useCanvasHooks'; // variables and functions
 import {useTemString} from '../hooks/useTemString';
-
-import * as Tone from 'tone';
 
 import useCanvasRetry from '../hooksUseEffect/useCanvasRetry';
 import useCanvasUpdatePitch from '../hooksUseEffect/useCanvasUpdatePitch';
@@ -37,7 +35,6 @@ interface StairProps {
   colorsMode: string;
 }
 
-const defaultSliderValue = [110, 200];
 const Stair: React.FC<StairProps> = ({
   setMaxLyricCount,
   initialRange,
@@ -86,17 +83,9 @@ const Stair: React.FC<StairProps> = ({
     handleMouseMove,
   } = useCanvasHooks(size, divisor, COLORS, initialRange);
 
-  // Pitch Generator
-  const [isPitchPlaying, setIsPitchPlaying] = useState<boolean>(false);
-  const [audioPitchVal, setAudioPitchVal] = useState<Tone.Unit.Frequency>(
-    defaultSliderValue[0]
-  ); // Set Tone to low pitch val
-  const [pitchIndex, setPitchIndex] = useState<number>(-1);
-  const [synth, setSynth] = useState<Tone.Synth>();
-
   const {syllablesString} = useTemString(theme);
 
-  const [inputValue, setInputValue] = useState<number[]>(defaultSliderValue);
+  const [inputValue, setInputValue] = useState<number[]>([110, 200]);
   const desiredLength = Math.floor(size[1] / divisor);
   const [pitchHistory, setPitchHistory] = useState<number[]>([]);
   const [pitchDifferences, setPitchDifferences] = useState<number[]>([]);
@@ -367,12 +356,10 @@ const Stair: React.FC<StairProps> = ({
           0
         );
         const difference = Math.abs(mappedJsonValue - ballYtem);
-        const difference_threshold =
-          canvasHeight * (25 / (initialRange[1] - initialRange[0]));
         if (pitch > 1) {
           tempPitchDiff.push(Math.abs(pitchArrayCus[ctxdiv] - pitch));
         }
-        if (difference <= difference_threshold && !isNaN(difference)) {
+        if (difference <= 50 && !isNaN(difference)) {
           for (
             let j = ctxdiv - divisor;
             j <= ctxdiv + divisor && j < CanvasLength;
@@ -413,52 +400,6 @@ const Stair: React.FC<StairProps> = ({
       setShouldDisabled(false);
     }
   }, [isPlaying]);
-
-  // Tone Gen useEffect
-  useEffect(() => {
-    if (synth) {
-      synth.triggerRelease();
-    }
-    if (isPitchPlaying) {
-      const synthTemp = new Tone.Synth().toDestination();
-      setSynth(synthTemp);
-      synthTemp?.triggerAttack(audioPitchVal);
-    }
-  }, [audioPitchVal]);
-
-  useEffect(() => {
-    if (!isPitchPlaying || isPlaying) {
-      if (synth) {
-        synth.triggerRelease();
-        setIsPitchPlaying(false);
-      }
-    } else {
-      setPitchIndex(0);
-    }
-  }, [isPitchPlaying, isPlaying]);
-
-  useEffect(() => {
-    if (!isPlaying && isPitchPlaying) {
-      const pitchValues = [
-        inputValue[0],
-        inputValue[0] + (inputValue[1] - inputValue[0]) / 2,
-        inputValue[1],
-      ];
-      const pitchPattern = [0, 1, 2, 1];
-      setAudioPitchVal(pitchValues[pitchPattern[pitchIndex]]);
-
-      setTimeout(() => {
-        if (pitchIndex < 3) {
-          setPitchIndex(pitchIndex + 1);
-        } else {
-          setPitchIndex(0);
-        }
-      }, 750);
-    } else {
-      setPitchIndex(-1);
-      setAudioPitchVal(0);
-    }
-  }, [pitchIndex]);
 
   return (
     <Row style={{maxHeight: '27vw', marginBottom: '5vw', maxWidth: '100vw'}}>
@@ -502,7 +443,7 @@ const Stair: React.FC<StairProps> = ({
                 className={`yAxisLines yAxisLines-${theme}`}
                 style={{height: canvasHeight}}
               >
-                {freqLabel?.map(() => <div></div>) ?? []}
+                {freqLabel?.map((_, index) => <div></div>) ?? []}
               </div>
             </Col>
           </Row>
@@ -586,18 +527,6 @@ const Stair: React.FC<StairProps> = ({
               defaultValue={inputValue}
             />
           </div>
-          <Tooltip title="If enabled, a sound will play at the target pitch for each step">
-            <Switch
-              defaultChecked={isPitchPlaying}
-              onChange={setIsPitchPlaying}
-              disabled={isPlaying}
-              checked={!isPlaying && isPitchPlaying}
-              checkedChildren="🎵"
-              unCheckedChildren="🎵"
-              style={{rotate: '90deg'}}
-              className={`customSwitch-${theme}`}
-            />
-          </Tooltip>
         </Space>
       </Col>
     </Row>

@@ -2,7 +2,6 @@ import {useState} from 'react';
 import type {CollapseProps, MenuProps} from 'antd';
 import {Typography, Row, Col} from 'antd';
 import SmoothScrollButton from '../function/SmoothScroll';
-import React from 'react';
 const {Paragraph} = Typography;
 
 export function useTemString(
@@ -127,336 +126,6 @@ export function useTemString(
 
   const items_3: CollapseProps['items'] = [
     {
-      key: '2',
-      label: (
-        <Typography.Title
-          id="part-3-2"
-          level={4}
-          style={{margin: 0, fontSize: fontSizeTitle}}
-          className={`text-${theme}`}
-        >
-          Constant Exercise
-        </Typography.Title>
-      ),
-      children: (
-        <>
-          <Paragraph
-            style={{textAlign: fontAlign, fontSize: fontSizePara}}
-            className={`text-${theme}`}
-          >
-            The Constant exercise is the most basic exercise. When you talk, it
-            shows your current pitch with a large black dot and the last few
-            seconds of your pitch with small purple dots (red if you're using
-            the Colorblind scheme). If you stop talking, the graph keeps moving
-            but does not show new purple dots.
-          </Paragraph>
-          <Paragraph
-            style={{textAlign: fontAlign, fontSize: fontSizePara}}
-            className={`text-${theme}`}
-          >
-            On the right side of the graph, you can see a vertical slider.
-            Moving this slider up and down creates a constant pitch target that
-            is shown as a horizontal dark blue line across the screen. You can
-            try to match this target. If your pitch is close enough to the
-            target, the target line will change color to indicate you are
-            matching the target. You can change the target as you exercise if
-            you want.
-          </Paragraph>
-          <Paragraph
-            style={{textAlign: fontAlign, fontSize: fontSizePara}}
-            className={`text-${theme}`}
-          >
-            If you want something to read while you practice matching a target
-            pitch, you can use the Upload txt file button below the graph to
-            upload a .txt file with text of your choosing. In the .txt file, a
-            semicolon should indicate a new line. While reading, you can then
-            move between lines using the Next/Previous buttons underneath the
-            text. Other file formats are not currently supported but are planned
-            for future releases.
-          </Paragraph>
-          <iframe
-            width="560"
-            height="315"
-            src="https://www.youtube.com/embed/63OuVpZWm4g"
-            title="TruVox Constant Exercise Demo"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerPolicy="strict-origin-when-cross-origin"
-            allowFullScreen
-          ></iframe>
-        </>
-      ),
-    },
-    {
-      key: '6',
-      label: (
-        <Typography.Title
-          id="part-3-6"
-          level={4}
-          style={{margin: 0, fontSize: fontSizeTitle}}
-          className={`text-${theme}`}
-        >
-          Chanting Exercise
-        </Typography.Title>
-      ),
-      children: (
-        <>
-          <Paragraph
-            style={{textAlign: fontAlign, fontSize: fontSizePara}}
-            className={`text-${theme}`}
-          >
-            The Chanting exercise first asks you to hum at a given pitch, which
-            can be selected the same way as the pitch target in the Constant
-            exercise. Once you hum at the target pitch for about a second, it
-            asks you to chant a specific phrase at the same target pitch. These
-            phrases may focus on the letter M or the letter N, and can be
-            resonant (“voiced”) or nonresonant (“voiceless”). Once you have
-            finished chanting the phrase, press the Next button and say the same
-            phrase at your regular (non-chanting) without real-time pitch
-            feedback. Finally, press the Finish button to show how you did. This
-            is intended to help you talk at a target pitch in a different way
-            than the Constant exercise.
-          </Paragraph>
-          <Paragraph
-            style={{textAlign: fontAlign, fontSize: fontSizePara}}
-            className={`text-${theme}`}
-          >
-            The four levels (1-4) gradually increase in difficulty, with 4 being
-            hardest. Level 1 focuses on the letter M and voiced phrases, which
-            provide the most resonant sensation (vibrations in the face and
-            vocal tract). Level 2 focuses on the letter M and unvoiced phrases,
-            which are still somewhat resonant. Levels 3 and 4 focus on the
-            letter N, which provides less resonant sensation. We recommend
-            progressing through these levels as you feel competent at them.
-          </Paragraph>
-          <iframe
-            width="560"
-            height="315"
-            src="https://www.youtube.com/embed/-oeIlBYThoY"
-            title="TruVox Chanting Demo"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerPolicy="strict-origin-when-cross-origin"
-            allowFullScreen
-          ></iframe>
-        </>
-      ),
-    },
-    {
-      key: '3',
-      label: (
-        <Typography.Title
-          id="part-3-3"
-          level={4}
-          style={{margin: 0, fontSize: fontSizeTitle}}
-          className={`text-${theme}`}
-        >
-          Stair Exercise
-        </Typography.Title>
-      ),
-      children: (
-        <>
-          <Paragraph
-            style={{textAlign: fontAlign, fontSize: fontSizePara}}
-            className={`text-${theme}`}
-          >
-            When you talk, the Staircase exercise shows your current pitch with
-            a large black dot and the last few seconds of your pitch with small
-            purple dots (red if you're using the Colorblind scheme). If you stop
-            talking, the graph keeps moving but does not show new purple dots.
-            This is the same as in the Constant exercise.
-          </Paragraph>
-          <Paragraph
-            style={{textAlign: fontAlign, fontSize: fontSizePara}}
-            className={`text-${theme}`}
-          >
-            A dark blue line shows a sequence of pitches for you to match within
-            a few seconds. You can change the location of these 'target' pitches
-            using the light blue vertical slider to the right of the graph –
-            drag the bottom white ball up/down to move the lowest target or drag
-            the top white ball to move the highest target.
-          </Paragraph>
-          <Paragraph
-            style={{textAlign: fontAlign, fontSize: fontSizePara}}
-            className={`text-${theme}`}
-          >
-            Pressing the Start button starts moving the current pitch indicator.
-            Press it when you are ready to try matching the pitches. You can
-            pause at any time, and once the indicator gets to the end, you can
-            press Start again to restart. As you speak, the dark blue target
-            pitch curve will change color if your pitch is close to it.
-          </Paragraph>
-          <Paragraph
-            style={{textAlign: fontAlign, fontSize: fontSizePara}}
-            className={`text-${theme}`}
-          >
-            If you would like to have some sounds to make while matching the
-            target pitches, the Show/Hide buttons below the graph display a
-            5-syllable phrase. The full phrase is shown below the Show/Hide
-            buttons, and each individual syllable is shown on one of the target
-            pitch lines. The Next/Previous buttons let you move to the
-            next/previous phrase, and the Retry button resets the current
-            phrase. You don't have to use this function, it's just if you want
-            to have something to say.
-          </Paragraph>
-          <iframe
-            width="560"
-            height="315"
-            src="https://www.youtube.com/embed/Majy2E2zw94"
-            title="TruVox Stair Exercise Demo"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerPolicy="strict-origin-when-cross-origin"
-            allowFullScreen
-          ></iframe>
-        </>
-      ),
-    },
-    {
-      key: '5',
-      label: (
-        <Typography.Title
-          id="part-3-5"
-          level={4}
-          style={{margin: 0, fontSize: fontSizeTitle}}
-          className={`text-${theme}`}
-        >
-          Human Curve Exercise
-        </Typography.Title>
-      ),
-      children: (
-        <>
-          <Paragraph
-            style={{textAlign: fontAlign, fontSize: fontSizePara}}
-            className={`text-${theme}`}
-          >
-            To use the Human Curve exercise, you must first select an avatar in
-            the Options menu. Once you have done that, the Human Curve exercise
-            shows pitch curves from that recorded avatar while speaking 2-, 3-,
-            4-, or 5-syllable phrases in dark blue. As in the other two
-            exercises, the graph shows your current pitch with a large black dot
-            and the last few seconds of your pitch with small purple dots (red
-            if you're using the Colorblind scheme). If you stop talking, the
-            graph keeps moving but does not show new purple dots.
-          </Paragraph>
-          <Paragraph
-            style={{textAlign: fontAlign, fontSize: fontSizePara}}
-            className={`text-${theme}`}
-          >
-            The goal of the exercise is to match the avatar's pitch curve as you
-            say the same phrase. The target phrase is shown below the graph in
-            green. Pressing the Start button starts moving the current pitch
-            indicator. Press it when you are ready to try matching the curve.
-            You can pause at any time, and once the indicator gets to the end,
-            you can press Start again to restart the same phrase. As you speak,
-            the dark blue target pitch curve will change color if your pitch is
-            close to it.
-          </Paragraph>
-          <Paragraph
-            style={{textAlign: fontAlign, fontSize: fontSizePara}}
-            className={`text-${theme}`}
-          >
-            Once the phrase finishes, you can press the Retry button to try
-            matching it again, or press Next/Previous to move to the next or
-            previous phrase. The next two phrases are shown in grey below the
-            current phrase.
-          </Paragraph>
-          <Paragraph
-            style={{textAlign: fontAlign, fontSize: fontSizePara}}
-            className={`text-${theme}`}
-          >
-            If you want to hear the phrase spoken by your selected avatar, press
-            the Listen button. The dark blue curve will change color as the
-            phrase is played to indicate the timing.
-          </Paragraph>
-          <iframe
-            width="560"
-            height="315"
-            src="https://www.youtube.com/embed/cP1_hMm4y2s"
-            title="TruVox Human Curve Demo"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerPolicy="strict-origin-when-cross-origin"
-            allowFullScreen
-          ></iframe>
-        </>
-      ),
-    },
-    {
-      key: '4',
-      label: (
-        <Typography.Title
-          id="part-3-4"
-          level={4}
-          style={{margin: 0, fontSize: fontSizeTitle}}
-          className={`text-${theme}`}
-        >
-          Heteronyms Exercise
-        </Typography.Title>
-      ),
-      children: (
-        <>
-          <Paragraph
-            style={{textAlign: fontAlign, fontSize: fontSizePara}}
-            className={`text-${theme}`}
-          >
-            Heteronyms are words that are spelled the same way but pronounced
-            differently - for example, by stressing a different syllable. This
-            exercise is intended to teach you about upward and downward
-            intonation (a rising or falling pitch), which you can achieve by
-            stressing a different syllable in a word.
-          </Paragraph>
-          <Paragraph
-            style={{textAlign: fontAlign, fontSize: fontSizePara}}
-            className={`text-${theme}`}
-          >
-            The display looks similar to the Constant and Stair exercise, and
-            below it you’ll see a word with a syllable stressed - for example,
-            ADDress. Use the 1 / 2 button to the right of the Start button to
-            switch between the two pronunciations of the word - for example,
-            ADDress and addRESS. On the display, the target pitch curve will
-            show an example of a vocal model speaking that word, and you can
-            press the Listen button to hear the vocal model speak. The preferred
-            model can be selected in Settings.
-          </Paragraph>
-          <Paragraph
-            style={{textAlign: fontAlign, fontSize: fontSizePara}}
-            className={`text-${theme}`}
-          >
-            Press the Start button when you are ready to try saying the
-            displayed word with the displayed syllable stress. You do not need
-            to match the vocal model’s pitch curve exactly; the goal is simply
-            to get a “feel” for how the pitch of a word increases or decreases.
-          </Paragraph>
-          <Paragraph
-            style={{textAlign: fontAlign, fontSize: fontSizePara}}
-            className={`text-${theme}`}
-          >
-            You can also use the Words / Sentences button to the right of the
-            Start button to see the heteronym either on its own or used in a
-            sentence. This may help you understand the difference in intonation.
-            The Next and Previous buttons will move you to the next or previous
-            heteronym, and the Retry button will let you try the same word or
-            phrase again. As mentioned, this exercise is different from the
-            Constant and Stair exercises since it does not help you directly
-            maintain a higher pitch - it simply teaches the concept of upward
-            and downward pitch within a word, which can serve as the basis for
-            other gender-affirming voice exercises.
-          </Paragraph>
-          <iframe
-            width="560"
-            height="315"
-            src="https://www.youtube.com/embed/nVrrTkP49Mw"
-            title="TruVox Heteronyms Demo"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerPolicy="strict-origin-when-cross-origin"
-            allowFullScreen
-          ></iframe>
-        </>
-      ),
-    },
-    {
       key: '1',
       label: (
         <Typography.Title
@@ -540,6 +209,336 @@ export function useTemString(
               </li>
             </ul>
           </Paragraph>
+        </>
+      ),
+    },
+    {
+      key: '2',
+      label: (
+        <Typography.Title
+          id="part-3-2"
+          level={4}
+          style={{margin: 0, fontSize: fontSizeTitle}}
+          className={`text-${theme}`}
+        >
+          Constant Exercise
+        </Typography.Title>
+      ),
+      children: (
+        <>
+          <Paragraph
+            style={{textAlign: fontAlign, fontSize: fontSizePara}}
+            className={`text-${theme}`}
+          >
+            The Constant exercise is the most basic exercise. When you talk, it
+            shows your current pitch with a large black dot and the last few
+            seconds of your pitch with small purple dots (red if you're using
+            the Colorblind scheme). If you stop talking, the graph keeps moving
+            but does not show new purple dots.
+          </Paragraph>
+          <Paragraph
+            style={{textAlign: fontAlign, fontSize: fontSizePara}}
+            className={`text-${theme}`}
+          >
+            On the right side of the graph, you can see a vertical slider.
+            Moving this slider up and down creates a constant pitch target that
+            is shown as a horizontal dark blue line across the screen. You can
+            try to match this target. If your pitch is close enough to the
+            target, the target line will change color to indicate you are
+            matching the target. You can change the target as you exercise if
+            you want.
+          </Paragraph>
+          <Paragraph
+            style={{textAlign: fontAlign, fontSize: fontSizePara}}
+            className={`text-${theme}`}
+          >
+            If you want something to read while you practice matching a target
+            pitch, you can use the Upload txt file button below the graph to
+            upload a .txt file with text of your choosing. In the .txt file, a
+            semicolon should indicate a new line. While reading, you can then
+            move between lines using the Next/Previous buttons underneath the
+            text. Other file formats are not currently supported but are planned
+            for future releases.
+          </Paragraph>
+          <iframe
+            width="560"
+            height="315"
+            src="https://www.youtube.com/embed/63OuVpZWm4g"
+            title="TruVox Constant Exercise Demo"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+          ></iframe>
+        </>
+      ),
+    },
+    {
+      key: '3',
+      label: (
+        <Typography.Title
+          id="part-3-3"
+          level={4}
+          style={{margin: 0, fontSize: fontSizeTitle}}
+          className={`text-${theme}`}
+        >
+          Stair Exercise
+        </Typography.Title>
+      ),
+      children: (
+        <>
+          <Paragraph
+            style={{textAlign: fontAlign, fontSize: fontSizePara}}
+            className={`text-${theme}`}
+          >
+            When you talk, the Staircase exercise shows your current pitch with
+            a large black dot and the last few seconds of your pitch with small
+            purple dots (red if you're using the Colorblind scheme). If you stop
+            talking, the graph keeps moving but does not show new purple dots.
+            This is the same as in the Constant exercise.
+          </Paragraph>
+          <Paragraph
+            style={{textAlign: fontAlign, fontSize: fontSizePara}}
+            className={`text-${theme}`}
+          >
+            A dark blue line shows a sequence of pitches for you to match within
+            a few seconds. You can change the location of these 'target' pitches
+            using the light blue vertical slider to the right of the graph –
+            drag the bottom white ball up/down to move the lowest target or drag
+            the top white ball to move the highest target.
+          </Paragraph>
+          <Paragraph
+            style={{textAlign: fontAlign, fontSize: fontSizePara}}
+            className={`text-${theme}`}
+          >
+            Pressing the Start button starts moving the current pitch indicator.
+            Press it when you are ready to try matching the pitches. You can
+            pause at any time, and once the indicator gets to the end, you can
+            press Start again to restart. As you speak, the dark blue target
+            pitch curve will change color if your pitch is close to it.
+          </Paragraph>
+          <Paragraph
+            style={{textAlign: fontAlign, fontSize: fontSizePara}}
+            className={`text-${theme}`}
+          >
+            If you would like to have some sounds to make while matching the
+            target pitches, the Show/Hide buttons below the graph display a
+            5-syllable phrase. The full phrase is shown below the Show/Hide
+            buttons, and each individual syllable is shown on one of the target
+            pitch lines. The Next/Previous buttons let you move to the
+            next/previous phrase, and the Retry button resets the current
+            phrase. You don't have to use this function, it's just if you want
+            to have something to say.
+          </Paragraph>
+          <iframe
+            width="560"
+            height="315"
+            src="https://www.youtube.com/embed/Majy2E2zw94"
+            title="TruVox Stair Exercise Demo"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+          ></iframe>
+        </>
+      ),
+    },
+    {
+      key: '4',
+      label: (
+        <Typography.Title
+          id="part-3-4"
+          level={4}
+          style={{margin: 0, fontSize: fontSizeTitle}}
+          className={`text-${theme}`}
+        >
+          Heteronyms Exercise
+        </Typography.Title>
+      ),
+      children: (
+        <>
+          <Paragraph
+            style={{textAlign: fontAlign, fontSize: fontSizePara}}
+            className={`text-${theme}`}
+          >
+            Heteronyms are words that are spelled the same way but pronounced
+            differently - for example, by stressing a different syllable. This
+            exercise is intended to teach you about upward and downward
+            intonation (a rising or falling pitch), which you can achieve by
+            stressing a different syllable in a word.
+          </Paragraph>
+          <Paragraph
+            style={{textAlign: fontAlign, fontSize: fontSizePara}}
+            className={`text-${theme}`}
+          >
+            The display looks similar to the Constant and Stair exercise, and
+            below it you’ll see a word with a syllable stressed - for example,
+            ADDress. Use the 1 / 2 button to the right of the Start button to
+            switch between the two pronunciations of the word - for example,
+            ADDress and addRESS. On the display, the target pitch curve will
+            show an example of a vocal model speaking that word, and you can
+            press the Listen button to hear the vocal model speak. The preferred
+            model can be selected in Settings.
+          </Paragraph>
+          <Paragraph
+            style={{textAlign: fontAlign, fontSize: fontSizePara}}
+            className={`text-${theme}`}
+          >
+            Press the Start button when you are ready to try saying the
+            displayed word with the displayed syllable stress. You do not need
+            to match the vocal model’s pitch curve exactly; the goal is simply
+            to get a “feel” for how the pitch of a word increases or decreases.
+          </Paragraph>
+          <Paragraph
+            style={{textAlign: fontAlign, fontSize: fontSizePara}}
+            className={`text-${theme}`}
+          >
+            You can also use the Words / Sentences button to the right of the
+            Start button to see the heteronym either on its own or used in a
+            sentence. This may help you understand the difference in intonation.
+            The Next and Previous buttons will move you to the next or previous
+            heteronym, and the Retry button will let you try the same word or
+            phrase again. As mentioned, this exercise is different from the
+            Constant and Stair exercises since it does not help you directly
+            maintain a higher pitch - it simply teaches the concept of upward
+            and downward pitch within a word, which can serve as the basis for
+            other gender-affirming voice exercises.
+          </Paragraph>
+          <iframe
+            width="560"
+            height="315"
+            src="https://www.youtube.com/embed/nVrrTkP49Mw"
+            title="TruVox Heteronyms Demo"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+          ></iframe>
+        </>
+      ),
+    },
+    {
+      key: '5',
+      label: (
+        <Typography.Title
+          id="part-3-5"
+          level={4}
+          style={{margin: 0, fontSize: fontSizeTitle}}
+          className={`text-${theme}`}
+        >
+          Human Curve Exercise
+        </Typography.Title>
+      ),
+      children: (
+        <>
+          <Paragraph
+            style={{textAlign: fontAlign, fontSize: fontSizePara}}
+            className={`text-${theme}`}
+          >
+            To use the Human Curve exercise, you must first select an avatar in
+            the Options menu. Once you have done that, the Human Curve exercise
+            shows pitch curves from that recorded avatar while speaking 2-, 3-,
+            4-, or 5-syllable phrases in dark blue. As in the other two
+            exercises, the graph shows your current pitch with a large black dot
+            and the last few seconds of your pitch with small purple dots (red
+            if you're using the Colorblind scheme). If you stop talking, the
+            graph keeps moving but does not show new purple dots.
+          </Paragraph>
+          <Paragraph
+            style={{textAlign: fontAlign, fontSize: fontSizePara}}
+            className={`text-${theme}`}
+          >
+            The goal of the exercise is to match the avatar's pitch curve as you
+            say the same phrase. The target phrase is shown below the graph in
+            green. Pressing the Start button starts moving the current pitch
+            indicator. Press it when you are ready to try matching the curve.
+            You can pause at any time, and once the indicator gets to the end,
+            you can press Start again to restart the same phrase. As you speak,
+            the dark blue target pitch curve will change color if your pitch is
+            close to it.
+          </Paragraph>
+          <Paragraph
+            style={{textAlign: fontAlign, fontSize: fontSizePara}}
+            className={`text-${theme}`}
+          >
+            Once the phrase finishes, you can press the Retry button to try
+            matching it again, or press Next/Previous to move to the next or
+            previous phrase. The next two phrases are shown in grey below the
+            current phrase.
+          </Paragraph>
+          <Paragraph
+            style={{textAlign: fontAlign, fontSize: fontSizePara}}
+            className={`text-${theme}`}
+          >
+            If you want to hear the phrase spoken by your selected avatar, press
+            the Listen button. The dark blue curve will change color as the
+            phrase is played to indicate the timing.
+          </Paragraph>
+          <iframe
+            width="560"
+            height="315"
+            src="https://www.youtube.com/embed/cP1_hMm4y2s"
+            title="TruVox Human Curve Demo"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+          ></iframe>
+        </>
+      ),
+    },
+    {
+      key: '6',
+      label: (
+        <Typography.Title
+          id="part-3-6"
+          level={4}
+          style={{margin: 0, fontSize: fontSizeTitle}}
+          className={`text-${theme}`}
+        >
+          Chanting Exercise
+        </Typography.Title>
+      ),
+      children: (
+        <>
+          <Paragraph
+            style={{textAlign: fontAlign, fontSize: fontSizePara}}
+            className={`text-${theme}`}
+          >
+            The Chanting exercise first asks you to hum at a given pitch, which
+            can be selected the same way as the pitch target in the Constant
+            exercise. Once you hum at the target pitch for about a second, it
+            asks you to chant a specific phrase at the same target pitch. These
+            phrases may focus on the letter M or the letter N, and can be
+            resonant (“voiced”) or nonresonant (“voiceless”). Once you have
+            finished chanting the phrase, press the Next button and say the same
+            phrase at your regular (non-chanting) without real-time pitch
+            feedback. Finally, press the Finish button to show how you did. This
+            is intended to help you talk at a target pitch in a different way
+            than the Constant exercise.
+          </Paragraph>
+          <Paragraph
+            style={{textAlign: fontAlign, fontSize: fontSizePara}}
+            className={`text-${theme}`}
+          >
+            The four levels (1-4) gradually increase in difficulty, with 4 being
+            hardest. Level 1 focuses on the letter M and voiced phrases, which
+            provide the most resonant sensation (vibrations in the face and
+            vocal tract). Level 2 focuses on the letter M and unvoiced phrases,
+            which are still somewhat resonant. Levels 3 and 4 focus on the
+            letter N, which provides less resonant sensation. We recommend
+            progressing through these levels as you feel competent at them.
+          </Paragraph>
+          <iframe
+            width="560"
+            height="315"
+            src="https://www.youtube.com/embed/-oeIlBYThoY"
+            title="TruVox Chanting Demo"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+          ></iframe>
         </>
       ),
     },

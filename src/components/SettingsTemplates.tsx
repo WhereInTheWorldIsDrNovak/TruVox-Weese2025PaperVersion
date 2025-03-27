@@ -1,5 +1,4 @@
 import {Radio, RadioChangeEvent, Space, Switch, Tooltip} from 'antd';
-import React from 'react';
 
 interface RadioItem {
   value: string;

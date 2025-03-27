@@ -92,7 +92,9 @@ const ConstantTxt = forwardRef<HTMLDivElement, ConstantTxtProps>(
     useImperativeHandle(ref, () => ref_volume_slider.current as HTMLDivElement);
     const [inputValue, setInputValue] = useState(defaultSliderValue);
     const [currentPitchDiffs, setCurrentPitchDiffs] = useState<number[]>([]);
-    const [, setLatestAvgPitchDiff] = useState<number | null>(null);
+    const [latestAvgPitchDiff, setLatestAvgPitchDiff] = useState<number | null>(
+      null
+    );
 
     // Pitch Generator
     const [isPitchPlaying, setIsPitchPlaying] = useState<boolean>(false);
@@ -336,9 +338,7 @@ const ConstantTxt = forwardRef<HTMLDivElement, ConstantTxtProps>(
               0
             );
             const difference = Math.abs(mappedJsonValue - ballYtem);
-            const difference_threshold =
-              canvasHeight * (20 / (initialRange[1] - initialRange[0]));
-            if (difference <= difference_threshold && !isNaN(difference)) {
+            if (difference <= 40 && !isNaN(difference)) {
               for (
                 let j = i - divisor;
                 j <= i + divisor && j < CanvasLengthBall;
@@ -419,17 +419,16 @@ const ConstantTxt = forwardRef<HTMLDivElement, ConstantTxtProps>(
     }, [audioPitchVal]);
 
     useEffect(() => {
-      if (!isPitchPlaying || isPlaying) {
+      if (!isPitchPlaying) {
         if (synth) {
           synth.triggerRelease();
-          setIsPitchPlaying(false);
         }
       } else {
         const synthTemp = new Tone.Synth().toDestination();
         setSynth(synthTemp);
         synthTemp?.triggerAttack(audioPitchVal);
       }
-    }, [isPitchPlaying, isPlaying]);
+    }, [isPitchPlaying]);
 
     return (
       <div>
@@ -546,8 +545,6 @@ const ConstantTxt = forwardRef<HTMLDivElement, ConstantTxtProps>(
                 <Switch
                   defaultChecked={isPitchPlaying}
                   onChange={setIsPitchPlaying}
-                  disabled={isPlaying}
-                  checked={!isPlaying && isPitchPlaying}
                   checkedChildren="🎵"
                   unCheckedChildren="🎵"
                   style={{rotate: '90deg'}}

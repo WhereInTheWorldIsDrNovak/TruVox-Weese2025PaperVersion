@@ -9,7 +9,7 @@ function useCanvasCurrentPitch(
   textColor: string
 ) {
   useEffect(() => {
-    if (pitch !== null) {
+    if (pitch != null) {
       // console.log(pitch);
       if (pitch > 1) {
         setPitchHistory(prevHistory => {

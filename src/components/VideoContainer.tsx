@@ -36,7 +36,7 @@ const VideoContainer: React.FC<VideoContainer> = ({
   const colsPerRow = getColsPerRow(numOfVids, rows);
   const colWidth = getColWidth(colsPerRow);
 
-  const sections: any = [];
+  const sections = [];
   for (let i = 0; i < numOfVids; i++) {
     console.log(children[i]);
     sections.push(

@@ -36,15 +36,15 @@ class fxauto {
 
   CalculateFx(a, O) {
     let Q = 0;
-    for (let j = 0; j < O; j++) {
+    for (var j = 0; j < O; j++) {
       Q += a[j] * a[j];
     }
     Q = Math.sqrt(Q / O);
-    for (let f = this.tmin - 1; f <= this.tmax; f++) {
+    for (var f = this.tmin - 1; f <= this.tmax; f++) {
       let T = 0;
       let R = 0;
       let S = 0;
-      for (let j = 0; j < O - f; j++) {
+      for (var j = 0; j < O - f; j++) {
         S += a[j] * a[j + f];
         T += a[j] * a[j];
         R += a[j + f] * a[j + f];
@@ -53,7 +53,7 @@ class fxauto {
     }
     let N = this.tmin - 1;
     let d = this.ac[N];
-    for (let f = this.tmin; f <= this.tmax; f++) {
+    for (var f = this.tmin; f <= this.tmax; f++) {
       if (this.ac[f] > d) {
         d = this.ac[f];
         N = f;

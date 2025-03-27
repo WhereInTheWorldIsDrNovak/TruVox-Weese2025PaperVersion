@@ -10,16 +10,15 @@ import {
   Row,
   Col,
 } from 'antd';
+import {createFromIconfontCN} from '@ant-design/icons';
 import {ThemeColors, COLORS} from '../types/configTypes';
 import {RadioSetting, SwitchSetting} from './SettingsTemplates';
 import ResizableDrawer from './ResizableDrawer';
-import React, {useEffect, useState} from 'react';
-import {relative} from 'path';
+import React, {useState} from 'react';
 import '../CSS/play-audio-animation.css';
 
 interface SettingsDrawerProps {
-  isSettingsPinned?: boolean | undefined;
-  isInProfileModeal?: boolean | undefined;
+  isSettingsPinned: boolean;
   setIsSettingsPinned: (bool: boolean) => void;
   enableAdvFeatures: boolean;
   setEnableAdvFeatures: (bool: boolean) => void;
@@ -39,13 +38,9 @@ interface SettingsDrawerProps {
   setShowNotesPar: (bool: boolean) => void;
   showNotesPar: boolean;
   setEnableVol: (bool: boolean) => void;
-  isPitchDynamicallyScaled: boolean;
-  setIsPitchDynamicallyScaled: (bool: boolean) => void;
-  initialRange: number[];
   setInitialRange: (rangeValue: number[]) => void;
   setDivisor: (speedValue: number) => void;
   enableVol: boolean;
-  threshold: number;
   setThreshold: (e: number) => void;
   component: string;
   setBallPosition: (positionValue: number) => void;
@@ -57,8 +52,7 @@ interface SettingsDrawerProps {
 }
 
 const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
-  isSettingsPinned = undefined,
-  isInProfileModeal = undefined,
+  isSettingsPinned,
   setIsSettingsPinned,
   enableAdvFeatures,
   setEnableAdvFeatures,
@@ -72,13 +66,9 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
   setShowNotesPar,
   showNotesPar,
   setEnableVol,
-  isPitchDynamicallyScaled,
-  setIsPitchDynamicallyScaled,
-  initialRange,
   setInitialRange,
   setDivisor,
   enableVol,
-  threshold,
   setThreshold,
   component,
   setBallPosition,
@@ -97,11 +87,6 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
       setCOLORS(themeColors[themeName].co);
     }
   };
-  const [range, setRange] = useState<[number, number]>([100, 300]); // State for slider
-
-  useEffect(() => {
-    setRange([initialRange[0], initialRange[1]]); // Update range dynamically when initialRange changes
-  }, [initialRange]);
 
   // On Changes
   const onChangeThreshold = (e: number) => {
@@ -185,7 +170,7 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
   // Components
   const pitchDispColor = (
     <RadioSetting
-      title="Color Scheme"
+      title="Pitch Display Color Scheme"
       onChange={onChangeColor}
       value={colorsMode}
       defaultValue="default"
@@ -214,8 +199,8 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
     <SwitchSetting
       title="Pin Settings Open"
       onChange={setIsSettingsPinned}
-      value={!!isSettingsPinned}
-      defaultChecked={!!isSettingsPinned}
+      value={isSettingsPinned}
+      defaultChecked={isSettingsPinned}
       tooltip="If enabled, settings will stay open in a bar along the bottom of your screen, allowing you to change your settings and access the exercises at the same time."
     />
   );
@@ -247,7 +232,7 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
         placement="bottom"
         trigger={['click']}
         overlayClassName={`custom-dropdown customDropdown-${theme}`}
-        buttonsRender={([, rightButton]) => [
+        buttonsRender={([leftButton, rightButton]) => [
           <Button
             style={{
               display: 'flex',
@@ -356,33 +341,15 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
           step={1}
           min={50}
           max={90}
-          onChange={setThreshold}
+          onChange={onChangeThreshold}
           tooltip={{
             formatter: formatterdB,
           }}
           defaultValue={70}
-          value={threshold}
           marks={marksVol}
         />
       )}
     </div>
-  );
-
-  const handlePitchDisplayModeChange = (checked: boolean) => {
-    setIsPitchDynamicallyScaled(checked);
-    if (!checked) {
-      setInitialRange([100, 300]);
-    }
-  };
-
-  const adaptivePitchDisplayMode = (
-    <SwitchSetting
-      title="Adaptive Pitch Display Mode"
-      onChange={handlePitchDisplayModeChange}
-      value={isPitchDynamicallyScaled}
-      defaultChecked={isPitchDynamicallyScaled}
-      tooltip="Enable to automatically adjust the y-axis pitch range for exercises in human-curve and heteronyms."
-    />
   );
 
   const pitchDispRange = (
@@ -399,8 +366,6 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
         }}
         marks={marksRange}
         defaultValue={[100, 300]}
-        value={range} // Use `value` instead of `defaultValue`
-        // defaultValue={[initialRange[0], initialRange[1]]}
       />
     </div>
   );
@@ -440,9 +405,89 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
   );
 
   // Drawer
-  if (isInProfileModeal) {
+  if (isSettingsPinned) {
     return (
-      <div className={`settings-${theme}`}>
+      <ResizableDrawer
+        title="Settings"
+        placement="bottom"
+        onClose={() => setOpenSetting(false)}
+        open={openSetting}
+        height={215}
+        mask={false}
+        className={`settings-${theme}`}
+      >
+        <Flex vertical gap="middle">
+          <Row>
+            <Col span={12}>
+              <Space direction="vertical" size={'middle'}>
+                {modelSelection}
+                {pitchDispColor}
+                {themeSettings}
+              </Space>
+            </Col>
+            <Col span={1} />
+            <Col span={11}>
+              <Space direction="vertical" size={'middle'}>
+                {coordDispMode}
+                {autoStart}
+              </Space>
+            </Col>
+          </Row>
+
+          <div
+            className={`divider-${theme}`}
+            style={{
+              backgroundColor: 'lightgray',
+              height: '1px',
+              width: '100%',
+              borderRadius: '10px',
+            }}
+          />
+
+          <Row>
+            <Col span={12}>
+              <Space direction="vertical" size={'middle'}>
+                {pinSettings}
+              </Space>
+            </Col>
+            <Col span={1} />
+            <Col span={11}>
+              <Space direction="vertical" size={'middle'}>
+                {advFeatures}
+              </Space>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col span={24}>
+              <Space
+                direction="vertical"
+                size={'middle'}
+                style={{width: '100%'}}
+              >
+                {pitchDispRange}
+                {pitchIndicatorSpeed}
+                {enableAdvFeatures &&
+                  component !== 'Fixed' &&
+                  component !== 'Stair' &&
+                  component !== 'Heteronym' &&
+                  pitchIndicatorHorizPos}
+              </Space>
+            </Col>
+          </Row>
+        </Flex>
+      </ResizableDrawer>
+    );
+  } else {
+    return (
+      <ResizableDrawer
+        title="Settings"
+        placement="right"
+        onClose={() => setOpenSetting(false)}
+        open={openSetting}
+        height={215}
+        className={`settings-${theme}`}
+      >
         <Flex vertical gap="middle">
           <Space direction="vertical" size={'middle'}>
             {modelSelection}
@@ -459,40 +504,15 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
               }}
             />
 
-            {advFeatures}
-          </Space>
-        </Flex>
-      </div>
-    );
-  } else {
-    if (isSettingsPinned) {
-      return (
-        <ResizableDrawer
-          title="Settings"
-          placement="bottom"
-          onClose={() => setOpenSetting(false)}
-          open={openSetting}
-          height={215}
-          mask={false}
-          className={`settings-${theme}`}
-        >
-          <Flex vertical gap="middle">
-            <Row>
-              <Col span={12}>
-                <Space direction="vertical" size={'middle'}>
-                  {modelSelection}
-                  {pitchDispColor}
-                  {themeSettings}
-                </Space>
-              </Col>
-              <Col span={1} />
-              <Col span={11}>
-                <Space direction="vertical" size={'middle'}>
-                  {coordDispMode}
-                  {autoStart}
-                </Space>
-              </Col>
-            </Row>
+            {autoStart}
+            {coordDispMode}
+            {pitchDispRange}
+            {pitchIndicatorSpeed}
+            {enableAdvFeatures &&
+              component !== 'Fixed' &&
+              component !== 'Stair' &&
+              component !== 'Heteronym' &&
+              pitchIndicatorHorizPos}
 
             <div
               className={`divider-${theme}`}
@@ -504,95 +524,12 @@ const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
               }}
             />
 
-            <Row>
-              <Col span={12}>
-                <Space direction="vertical" size={'middle'}>
-                  {pinSettings}
-                </Space>
-              </Col>
-              <Col span={1} />
-              <Col span={11}>
-                <Space direction="vertical" size={'middle'}>
-                  {advFeatures}
-                </Space>
-              </Col>
-            </Row>
-
-            <Row>
-              <Col span={24}>
-                <Space
-                  direction="vertical"
-                  size={'middle'}
-                  style={{width: '100%'}}
-                >
-                  {adaptivePitchDisplayMode}
-                  {pitchDispRange}
-                  {pitchIndicatorSpeed}
-                  {enableAdvFeatures &&
-                    component !== 'Fixed' &&
-                    component !== 'Stair' &&
-                    component !== 'Heteronym' &&
-                    pitchIndicatorHorizPos}
-                </Space>
-              </Col>
-            </Row>
-          </Flex>
-        </ResizableDrawer>
-      );
-    } else {
-      return (
-        <ResizableDrawer
-          title="Settings"
-          placement="right"
-          onClose={() => setOpenSetting(false)}
-          open={openSetting}
-          height={215}
-          className={`settings-${theme}`}
-        >
-          <Flex vertical gap="middle">
-            <Space direction="vertical" size={'middle'}>
-              {modelSelection}
-              {pitchDispColor}
-              {themeSettings}
-
-              <div
-                className={`divider-${theme}`}
-                style={{
-                  backgroundColor: 'lightgray',
-                  height: '1px',
-                  width: '100%',
-                  borderRadius: '10px',
-                }}
-              />
-
-              {autoStart}
-              {coordDispMode}
-              {adaptivePitchDisplayMode}
-              {pitchDispRange}
-              {pitchIndicatorSpeed}
-              {enableAdvFeatures &&
-                component !== 'Fixed' &&
-                component !== 'Stair' &&
-                component !== 'Heteronym' &&
-                pitchIndicatorHorizPos}
-
-              <div
-                className={`divider-${theme}`}
-                style={{
-                  backgroundColor: 'lightgray',
-                  height: '1px',
-                  width: '100%',
-                  borderRadius: '10px',
-                }}
-              />
-
-              {pinSettings}
-              {advFeatures}
-            </Space>
-          </Flex>
-        </ResizableDrawer>
-      );
-    }
+            {pinSettings}
+            {advFeatures}
+          </Space>
+        </Flex>
+      </ResizableDrawer>
+    );
   }
 };
 

@@ -110,10 +110,10 @@ const Videos: React.FC<VideosProps> = ({theme}) => {
         >
           Welcome to the Videos section. This page contains several videos
           intended to supplement the interactive exercises found on the
-          Exercises page. Below on the left, you'll find three warmup videos
-          that you can watch whenever you want some guidance on how to warm up
-          before vocal exercise. To their right, you'll find videos that
-          demonstrate each of the pitch exercises.
+          Exercises page. Below you'll find three warmup videos that you can
+          watch whenever you want some guidance on how to warmup before vocal
+          exercise. Below the warmup videos, you'll also find videos that
+          demonstrate each of the Pitch exercises.
         </Typography.Paragraph>
 
         <br />

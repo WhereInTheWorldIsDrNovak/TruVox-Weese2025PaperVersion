@@ -8,19 +8,9 @@ import {
   Modal,
   Space,
   Dropdown,
-  Row,
-  Col,
-  Input,
 } from 'antd';
 import {UserOutlined} from '@ant-design/icons';
-import {
-  Routes,
-  Route,
-  Link,
-  useLocation,
-  useNavigate,
-  Navigate,
-} from 'react-router-dom';
+import {Routes, Route, Link, useLocation, useNavigate} from 'react-router-dom';
 import About from './Route/About';
 import Sample from './Route/Sample';
 import SampleVolume from './Route/SampleVolume';
@@ -29,36 +19,28 @@ import Help from './Route/Help';
 import Videos from './Route/Videos';
 import Main from './Route/HomePage';
 import PageNotFound from './Route/PageNotFound';
-import SignUp from './Route/SignUp';
-import LogIn from './Route/LogIn';
 import logoImageLight from '../src/icon/truvox-logo-light.png';
 import logoImageDark from '../src/icon/truvox-logo-dark.png';
 import './CSS/MainLayout.css';
 import './CSS/DarkMode.css';
-import type {MenuProps, RadioChangeEvent} from 'antd';
+import type {MenuProps} from 'antd';
 
 import {Flex} from 'antd';
+import {createFromIconfontCN} from '@ant-design/icons';
 import AudioPlayer from 'react-h5-audio-player';
 import {useOptionsHooks} from './hooks/useOptionsHooks';
 
 import DebugFooter from './Debug';
-import Title from 'antd/es/typography/Title';
-import axios from 'axios';
-import {login, logout, validateToken} from './services/authService';
-import {setupInterceptors} from './services/apiClient';
-import LogInComponent from './components/LogInComponent';
-import ForgotPassword from './Route/ForgotPassword';
-import ResetPassword from './Route/ResetPassword';
-import {RadioSetting} from './components/SettingsTemplates';
-import SettingsDrawer from './components/SettingsDrawer';
-import ChangePassword from './Route/ChangePassword';
+
+// MASSIVE SECURITY CONCERN
+const PlayIcon = createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/c/font_4566050_zpduwnlv2t.js',
+});
 
 const {Header, Content, Footer} = Layout;
 const defaultBackColor = 'linear-gradient(to bottom, #d7d2e6, #c9d9f3)';
 
 const MainLayout = () => {
-  const navigate = useNavigate();
-  setupInterceptors(navigate);
   const {
     gender,
     setGender,
@@ -81,38 +63,15 @@ const MainLayout = () => {
     themeColors,
     colorsMode,
     setColorsMode,
-    COLORS,
-    setCOLORS,
-    showNotesPar,
-    setShowNotesPar,
-    enableVol,
-    setEnableVol,
-    isPitchDynamicallyScaled,
-    setIsPitchDynamicallyScaled,
-    isSettingsPinned,
-    setIsSettingsPinned,
-    initialRange,
-    setInitialRange,
-    divisor,
-    setDivisor,
-    threshold,
-    setThreshold,
-    component,
-    setComponent,
-    ballPosition,
-    setBallPosition,
-    openSetting,
-    setOpenSetting,
   } = useOptionsHooks();
 
   const location = useLocation();
+  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState('Settings');
   const [menuKey, setMenuKey] = useState<string>('4');
   const [, setBackgroundImg] = useState<string>(defaultBackColor);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
-  const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
-  const [username, setUsername] = useState<string>('Guest');
 
   const defaultBackColor_2 = `url('/transvoice/HomePage-img-${theme}.png')`;
   let logoImg;
@@ -121,25 +80,6 @@ const MainLayout = () => {
   } else {
     logoImg = logoImageLight;
   }
-
-  const verifyToken = async () => {
-    try {
-      const response = await validateToken();
-      if (response?.status === 200) {
-        const {username} = response.data;
-        setIsSignedIn(true);
-        setUsername(username || 'Guest');
-      }
-    } catch (error) {
-      console.error('Token verification failed:', error);
-      setIsSignedIn(false);
-      setUsername('Guest');
-    }
-  };
-
-  useEffect(() => {
-    verifyToken();
-  }, []);
 
   useEffect(() => {
     fetchAudioData();
@@ -187,21 +127,6 @@ const MainLayout = () => {
       case '/videos':
         setMenuKey('8');
         break;
-      case '/signup':
-        setMenuKey('-1');
-        break;
-      case '/login':
-        setMenuKey('-1');
-        break;
-      case '/forgot-password':
-        setMenuKey('-1');
-        break;
-      case '/reset-password':
-        setMenuKey('-1');
-        break;
-      case '/change-password':
-        setMenuKey('-1');
-        break;
       default:
         setMenuKey('4');
     }
@@ -242,112 +167,124 @@ const MainLayout = () => {
     }, 2000); // duration for the animation (1.5 seconds)
   };
 
-  const UserProfile: React.FC = () => {
-    // let isSignedIn = false;  // In future change this variable to check whether or not the user is signed in
-    const [formError, setFormError] = useState<string | null>(null);
-
-    const handleSignOut = async () => {
-      try {
-        const response = await logout();
-        if (response?.status === 200) {
-          setIsSignedIn(false);
-          setUsername('Guest');
-          setFormError(null);
-        }
-      } catch (error) {
-        setFormError(error.response?.data?.message);
-      }
-    };
-
-    if (isSignedIn) {
-      const handleCloseSettings = () => {
-        if (setIsModalOpen) {
-          setIsModalOpen(false);
-        }
-      };
-
-      return (
-        <div style={{display: 'grid', justifyContent: 'center'}}>
-          {formError && (
-            <p style={{justifySelf: 'center', fontSize: 'calc(9px + 0.5vw)'}}>
-              {formError}
-            </p>
-          )}
-
-          <Link
-            to="/change-password"
-            style={{color: '#807fbc', fontWeight: 'bold'}}
-            onClick={isModalOpen ? handleCloseSettings : () => {}}
-            className={`customColorfulText-${theme}`}
-          >
-            Change Password
-          </Link>
-
-          <Button
-            type="primary"
-            className={`customGradientButton customGradientButton-${theme}`}
-            onClick={handleSignOut}
-          >
-            Sign out
-          </Button>
-        </div>
-      );
-    } else {
-      // Prompt user to log in
-      return (
-        <LogInComponent
-          setIsSignedIn={setIsSignedIn}
-          setUsername={setUsername}
-          theme={theme}
-          placement="profileMenu"
-          isModalOpen={isModalOpen}
-          setIsModalOpen={setIsModalOpen}
-        />
-      );
-    }
-  };
-
   // render profile page
   const renderContent = () => {
     switch (selectedItem) {
       case 'Profile':
-        return <UserProfile />;
+        return <p className={`text-${theme}`}>profile</p>;
       case 'Settings':
         return (
           <div>
-            <SettingsDrawer
-              isInProfileModeal
-              isSettingsPinned={isSettingsPinned}
-              setIsSettingsPinned={setIsSettingsPinned}
-              enableAdvFeatures={enableAdvFeatures}
-              setEnableAdvFeatures={setEnableAdvFeatures}
-              itemsAvatar={itemsAvatar}
-              handleIconClick={handleIconClick}
-              handleIconClickPlayAudio={handleIconClickPlayAudio}
-              genderName={genderName}
-              gender={gender}
-              colorsMode={colorsMode}
-              setColorsMode={setColorsMode}
-              setCOLORS={setCOLORS}
-              setShowNotesPar={setShowNotesPar}
-              showNotesPar={showNotesPar}
-              setEnableVol={setEnableVol}
-              isPitchDynamicallyScaled={isPitchDynamicallyScaled}
-              setIsPitchDynamicallyScaled={setIsPitchDynamicallyScaled}
-              initialRange={initialRange}
-              setInitialRange={setInitialRange}
-              setDivisor={setDivisor}
-              enableVol={enableVol}
-              threshold={threshold}
-              setThreshold={setThreshold}
-              component={component}
-              setBallPosition={setBallPosition}
-              openSetting={openSetting}
-              setOpenSetting={setOpenSetting}
-              theme={theme}
-              setTheme={setTheme}
-              themeColors={themeColors}
-            />
+            <Flex vertical gap="middle">
+              <Space>
+                <p className={`text-${theme}`}># Model Selection: </p>
+
+                <Dropdown.Button
+                  menu={{items: itemsAvatar}}
+                  placement="bottom"
+                  trigger={['click']}
+                  overlayClassName={`custom-dropdown customDropdown-${theme}`}
+                  buttonsRender={([, rightButton]) => [
+                    <Button
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                      }}
+                      onClick={e => {
+                        handleIconClickPlayAudioAnimation();
+                        handleIconClickPlayAudio(e);
+                      }}
+                      icon={
+                        <span
+                          style={{
+                            display: 'inline-flex',
+                            fontSize: '1.7em',
+                          }}
+                        >
+                          {isPlayIconLoading ? (
+                            // Spinner for loading animation
+                            <svg
+                              width="1em"
+                              height="1em"
+                              viewBox="0 0 20 20"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="currentColor"
+                            >
+                              <circle
+                                cx="10"
+                                cy="10"
+                                r="9"
+                                stroke={theme === 'light' ? 'black' : 'white'}
+                                strokeWidth="1.5"
+                                fill="none"
+                                strokeDasharray="31.415, 31.415"
+                                strokeDashoffset="0"
+                                className="spinner"
+                              />
+                              <path
+                                d="
+                                M13.8,10
+                                L7.5,6.5
+                                A4,4 0 0 1 7.5,6.5
+                                L7.5,13.8
+                                A4,4 0 0 1 7.5,13.5
+                                Z
+                              "
+                                fill={theme === 'light' ? 'black' : 'white'}
+                                stroke={theme === 'light' ? 'black' : 'white'}
+                                strokeLinejoin="round"
+                                strokeWidth="0.5"
+                              ></path>
+                            </svg>
+                          ) : (
+                            // Playback icon
+                            <svg
+                              width="1em"
+                              height="1em"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <circle
+                                cx="10"
+                                cy="10"
+                                r="9"
+                                fill="currentColor"
+                              ></circle>
+                              <path
+                                d="
+                                M13.8,10
+                                L7.5,6.5
+                                A4,4 0 0 1 7.5,6.5
+                                L7.5,13.8
+                                A4,4 0 0 1 7.5,13.5
+                                Z
+                              "
+                                fill={theme === 'light' ? 'white' : 'black'}
+                                stroke={theme === 'light' ? 'white' : 'black'}
+                                strokeLinejoin="round"
+                                strokeWidth="0.5"
+                              ></path>
+                            </svg>
+                          )}
+                        </span>
+                      }
+                    >
+                      {genderName === 'none'
+                        ? 'Model Voice'
+                        : gender === 'Female'
+                          ? genderName
+                          : 'Male01'}
+                    </Button>,
+                    React.cloneElement(
+                      rightButton as React.ReactElement<any, string>,
+                      {loading: false}
+                    ),
+                  ]}
+                ></Dropdown.Button>
+              </Space>
+              <br />
+            </Flex>
           </div>
         );
       case 'Other':
@@ -478,18 +415,18 @@ const MainLayout = () => {
                 <Link to="/assessment">ASSESSMENT</Link>
               </Menu.Item>
               <Menu.Item
-                key="8"
-                onClick={menuClicked}
-                className={`menu-item menu-item-${theme}`}
-              >
-                <Link to="/videos">VIDEOS</Link>
-              </Menu.Item>
-              <Menu.Item
                 key="2"
                 onClick={menuClicked}
                 className={`menu-item menu-item-${theme}`}
               >
                 <Link to="/Help">HELP</Link>
+              </Menu.Item>
+              <Menu.Item
+                key="8"
+                onClick={menuClicked}
+                className={`menu-item menu-item-${theme}`}
+              >
+                <Link to="/videos">VIDEOS</Link>
               </Menu.Item>
               <Menu.Item
                 key="1"
@@ -501,14 +438,16 @@ const MainLayout = () => {
             </Menu>
           </ConfigProvider>
 
-          <div className={`userIcon-${theme}`}>
-            <Button
-              shape="circle"
-              type="default"
-              icon={<UserOutlined />}
-              onClick={showModal} // Show modal on click
-            />
-          </div>
+          {enableAdvFeatures && (
+            <div className={`userIcon-${theme}`}>
+              <Button
+                shape="circle"
+                type="default"
+                icon={<UserOutlined />}
+                onClick={showModal} // Show modal on click
+              />
+            </div>
+          )}
         </Header>
 
         <Content
@@ -561,28 +500,6 @@ const MainLayout = () => {
                   themeColors={themeColors}
                   colorsMode={colorsMode}
                   setColorsMode={setColorsMode}
-                  COLORS={COLORS}
-                  setCOLORS={setCOLORS}
-                  showNotesPar={showNotesPar}
-                  setShowNotesPar={setShowNotesPar}
-                  enableVol={enableVol}
-                  setEnableVol={setEnableVol}
-                  isPitchDynamicallyScaled={isPitchDynamicallyScaled}
-                  setIsPitchDynamicallyScaled={setIsPitchDynamicallyScaled}
-                  isSettingsPinned={isSettingsPinned}
-                  setIsSettingsPinned={setIsSettingsPinned}
-                  initialRange={initialRange}
-                  setInitialRange={setInitialRange}
-                  divisor={divisor}
-                  setDivisor={setDivisor}
-                  threshold={threshold}
-                  setThreshold={setThreshold}
-                  component={component}
-                  setComponent={setComponent}
-                  ballPosition={ballPosition}
-                  setBallPosition={setBallPosition}
-                  openSetting={openSetting}
-                  setOpenSetting={setOpenSetting}
                 />
               }
             />
@@ -627,62 +544,6 @@ const MainLayout = () => {
             <Route path="/Help" element={<Help theme={theme} />} />
             <Route path="/videos" element={<Videos theme={theme} />} />
             <Route
-              path="/signup"
-              element={
-                isSignedIn ? <Navigate to="/" /> : <SignUp theme={theme} />
-              }
-            />
-            <Route
-              path="/login"
-              element={
-                isSignedIn ? (
-                  <Navigate to="/" />
-                ) : (
-                  <LogIn
-                    setIsSignedIn={setIsSignedIn}
-                    setUsername={setUsername}
-                    theme={theme}
-                  />
-                )
-              }
-            />
-            <Route
-              path="/forgot-password"
-              element={
-                isSignedIn ? (
-                  <Navigate to="/" />
-                ) : (
-                  <ForgotPassword theme={theme} />
-                )
-              }
-            />
-            <Route
-              path="/reset-password"
-              element={
-                isSignedIn ? (
-                  <Navigate to="/" />
-                ) : (
-                  <ResetPassword theme={theme} />
-                )
-              }
-            />
-
-            <Route
-              path="/change-password"
-              element={
-                isSignedIn ? (
-                  <ChangePassword
-                    setIsSignedIn={setIsSignedIn}
-                    setUsername={setUsername}
-                    theme={theme}
-                  />
-                ) : (
-                  <Navigate to="/" />
-                )
-              }
-            />
-
-            <Route
               path="/"
               element={
                 <Main
@@ -709,7 +570,7 @@ const MainLayout = () => {
         >
           <div style={{textAlign: 'center'}}>
             <Avatar size={64} icon={<UserOutlined />} />
-            <p className={`text-${theme}`}>{username || 'Guest'}</p>
+            <p className={`text-${theme}`}>Name Name</p>
 
             <Menu
               disabledOverflow={true}
@@ -721,6 +582,8 @@ const MainLayout = () => {
               className={`profileMenu-${theme}`}
             />
             {renderContent()}
+
+            <Button onClick={handleCancel}>Close</Button>
           </div>
         </Modal>
 

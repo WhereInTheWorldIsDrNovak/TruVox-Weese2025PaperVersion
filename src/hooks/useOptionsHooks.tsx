@@ -1,10 +1,10 @@
 import {useState, useRef} from 'react';
 import {ThemeColors} from '../types/configTypes';
 import AudioPlayer from 'react-h5-audio-player';
+import {createFromIconfontCN} from '@ant-design/icons';
 import {Button} from 'antd';
 import type {MenuProps} from 'antd';
 import '../CSS/play-audio-animation.css';
-import React from 'react';
 
 interface CustomButtonProps {
   label: string;
@@ -17,6 +17,10 @@ interface CustomButtonProps {
     label: string
   ) => void;
 }
+
+const PlayIcon = createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/c/font_4566050_zpduwnlv2t.js',
+});
 
 export function useOptionsHooks() {
   const [gender, setGender] = useState<string>('Female');
@@ -32,24 +36,13 @@ export function useOptionsHooks() {
   const [enableAdvFeatures, setEnableAdvFeatures] = useState(false);
   const [theme, setTheme] = useState<string>('light');
   const [colorsMode, setColorsMode] = useState('default');
-  const [showNotesPar, setShowNotesPar] = useState(false);
-  const [enableVol, setEnableVol] = useState<boolean>(false);
-  const [isPitchDynamicallyScaled, setIsPitchDynamicallyScaled] =
-    useState<boolean>(true);
-  const [isSettingsPinned, setIsSettingsPinned] = useState<boolean>(false);
-  const [initialRange, setInitialRange] = useState<number[]>([100, 300]);
-  const [divisor, setDivisor] = useState<number>(10);
-  const [threshold, setThreshold] = useState<number>(70);
-  const [component, setComponent] = useState<string>('ConstantTxt');
-  const [ballPosition, setBallPosition] = useState<number>(0.5);
-  const [openSetting, setOpenSetting] = useState(false);
 
   // Canvas colors for dif themes/colorblindness settings
   const themeColors: ThemeColors = {
-    // Name of theme
     light: {
-      // Pitch Display Color Theme
+      // Name of theme
       default: {
+        // Pitch Display Color Theme
         textColor: '#000000',
         dashedLineColor: '#e0e0e0',
         realVoiceColor: '#d679de',
@@ -85,8 +78,6 @@ export function useOptionsHooks() {
       },
     },
   };
-
-  const [COLORS, setCOLORS] = useState(themeColors[theme].default);
 
   const syllableCount = '5';
 
@@ -271,7 +262,19 @@ export function useOptionsHooks() {
     }, 600);
   };
 
-  const handleIconClickPlayAudio = () => {
+  const handleIconClickDropdown = (
+    e: React.MouseEvent<HTMLSpanElement, MouseEvent>
+  ) => {
+    // setIsClickListen(isClickListen+1);
+    setTimeout(() => {
+      playAudio();
+      console.log('play dropdown audio!');
+    }, 400);
+  };
+
+  const handleIconClickPlayAudio = (
+    e: React.MouseEvent<HTMLSpanElement, MouseEvent>
+  ) => {
     // Made sure that audio is loaded on dropdown menu selection
     setTimeout(() => {
       playAudio();
@@ -493,26 +496,6 @@ export function useOptionsHooks() {
       ),
     },
     {
-      key: 'Female-Fem10',
-      label: (
-        <CustomButton
-          label="Female-10"
-          handleIconClick={handleIconClick}
-          handleLabelClick={handleLabelClick}
-        />
-      ),
-    },
-    {
-      key: 'Female-Fem11',
-      label: (
-        <CustomButton
-          label="Female-11"
-          handleIconClick={handleIconClick}
-          handleLabelClick={handleLabelClick}
-        />
-      ),
-    },
-    {
       key: 'male',
       label: (
         <CustomButton
@@ -527,7 +510,6 @@ export function useOptionsHooks() {
   const ModelSelections = () => {
     <>{}</>;
   };
-
   return {
     gender,
     setGender,
@@ -568,28 +550,5 @@ export function useOptionsHooks() {
     setColorsMode,
 
     themeColors,
-
-    COLORS,
-    setCOLORS,
-    showNotesPar,
-    setShowNotesPar,
-    enableVol,
-    setEnableVol,
-    isPitchDynamicallyScaled,
-    setIsPitchDynamicallyScaled,
-    isSettingsPinned,
-    setIsSettingsPinned,
-    initialRange,
-    setInitialRange,
-    divisor,
-    setDivisor,
-    threshold,
-    setThreshold,
-    component,
-    setComponent,
-    ballPosition,
-    setBallPosition,
-    openSetting,
-    setOpenSetting,
   };
 }

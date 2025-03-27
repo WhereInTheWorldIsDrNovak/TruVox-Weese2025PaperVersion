@@ -16,6 +16,7 @@ import {Tooltip, FloatButton, Space, Switch} from 'antd';
 import '../CSS/sample.css';
 import '../CSS/SampleVolume.css';
 import type {RadioChangeEvent} from 'antd';
+import type {TourProps} from 'antd';
 import type {SliderSingleProps} from 'antd';
 import type {UploadProps} from 'antd';
 import {UploadOutlined} from '@ant-design/icons';
@@ -26,13 +27,13 @@ import {Image} from 'antd';
 import divide_1 from '../icon/Divider2-half.png';
 import {useTemString} from '../hooks/useTemString';
 import type {MenuProps} from 'antd';
+// @ts-ignore
 import pdfToText from 'react-pdftotext';
 import ConstantVol from '../Canvas/ConstantVol';
 import HeteronymVol from '../Canvas/HeteronymVol';
 import StairVol from '../Canvas/StairVol';
 import {ThemeColors} from '../types/configTypes';
 import ResizableDrawer from '../components/ResizableDrawer';
-import URLSearchParams from '@ungap/url-search-params';
 
 const marks: SliderSingleProps['marks'] = {
   0: '0dB',
@@ -83,6 +84,8 @@ interface SampleProps {
   setColorsMode: (str: string) => void;
 }
 const SampleVolume: React.FC<SampleProps> = ({
+  genderName,
+  setGender,
   enableAdvFeatures,
   setEnableAdvFeatures,
   theme,
@@ -134,6 +137,7 @@ const SampleVolume: React.FC<SampleProps> = ({
   // special variables
   const location = useLocation();
   const ref12 = useRef(null);
+  const ref1 = useRef(null);
   const ref2 = useRef(null);
   const ref3 = useRef(null);
   const parentRef = useRef<HTMLDivElement>(null);
@@ -223,7 +227,7 @@ const SampleVolume: React.FC<SampleProps> = ({
     const processedSentences = sentences.map(sentence => {
       const clauses = sentence.split(/(;|,|\/|\n)/);
 
-      const processedClauses = clauses.reduce((acc, clause) => {
+      const processedClauses = clauses.reduce((acc, clause, index) => {
         const trimmedClause = clause.trim();
         if (trimmedClause.length === 0) {
           return acc;
@@ -395,6 +399,51 @@ const SampleVolume: React.FC<SampleProps> = ({
     }
   }, [volume]);
 
+  // Tour
+  const steps: TourProps['steps'] = [
+    {
+      title: 'Pitch Exercises',
+      description: 'Switch between different exercises',
+      placement: 'top',
+      target: () => ref12.current,
+    },
+    {
+      title: 'Canvas Display',
+      description:
+        'Visualize your voice pitch and target pitch curve in real-time.',
+      placement: 'top',
+      target: () => ref1.current,
+    },
+    {
+      title: 'Function Buttons',
+      cover: (
+        <ul style={{textAlign: 'left'}}>
+          <li>Start/Stop: Begin or stop recording.</li>
+          <li>Retry: Clear display and restart.</li>
+          <li>
+            Upload txt/pdf File (optional): Upload text or pdf for you (in
+            .txt/.pdf format) to read while recording.
+          </li>
+          <li>
+            Previous Next (if text uploaded): Switch between lines of text.
+          </li>
+        </ul>
+      ),
+      target: () => ref2.current,
+    },
+    {
+      title: 'Slider',
+      description:
+        'Use this slides to change the target pitch value that you want to aim for.',
+      target: () => parentRef.current as HTMLDivElement,
+    },
+    {
+      title: 'Options menu',
+      description: 'Adjust settings such as the pitch display range.',
+      target: () => ref3.current,
+    },
+  ];
+
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const init = queryParams.get('init');
@@ -465,6 +514,27 @@ const SampleVolume: React.FC<SampleProps> = ({
         )
       );
     });
+  };
+  const handleMenuClick = (e: any) => {
+    setPlayLyricCount(0);
+    const [componentType, genderType, syllableCountType] = e.key.split('-');
+    if (componentType === 'Constant') {
+      setCurrentSelection('Constant');
+    } else if (componentType === 'ConstantTxt') {
+      setCurrentSelection('Constant');
+    } else if (componentType === 'Stair') {
+      setCurrentSelection('Staircase');
+    } else {
+      const tt = 'Syllables ' + syllableCountType;
+      setCurrentSelection(tt);
+      setSelectedNum(['5']);
+    }
+
+    setComponent(componentType);
+    setGender(genderType);
+    setSyllableCount(syllableCountType);
+
+    setCurrentSelection(e.key + 'syllable ' + genderName);
   };
 
   const onChangeStairSwitch = (value: boolean) => {
@@ -676,6 +746,13 @@ const SampleVolume: React.FC<SampleProps> = ({
             </>
             <ul>
               {fileContent.map((text, index) => {
+                const maxIndexToShow =
+                  playLyricCount + 2 >= fileContent.length
+                    ? fileContent.length - 1
+                    : playLyricCount + 2;
+
+                const shouldShow =
+                  index >= playLyricCount && index <= maxIndexToShow;
                 const isNearEnd = fileContent.length - playLyricCount <= 2;
                 const startIndex = isNearEnd
                   ? fileContent.length - 3

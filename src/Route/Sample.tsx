@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import {Button, Flex} from 'antd';
 import {SettingOutlined, CustomerServiceOutlined} from '@ant-design/icons';
 import {Col, Row, Tour, ConfigProvider} from 'antd';
-import {CaretRightOutlined} from '@ant-design/icons';
+import {CaretRightOutlined, LoadingOutlined} from '@ant-design/icons';
 import {Input} from 'antd';
 import {Layout, Menu, Dropdown} from 'antd';
 import {
@@ -30,12 +30,12 @@ import divide_1 from '../icon/Divider2-half.png';
 import {QuestionOutlined} from '@ant-design/icons';
 import {useTemString} from '../hooks/useTemString';
 import type {MenuProps} from 'antd';
+// @ts-ignore
 import pdfToText from 'react-pdftotext';
 import AudioPlayer from 'react-h5-audio-player';
 import {DownOutlined} from '@ant-design/icons';
-import {COLORS, ThemeColors} from '../types/configTypes';
+import {ThemeColors} from '../types/configTypes';
 import SettingsDrawer from '../components/SettingsDrawer';
-import URLSearchParams from '@ungap/url-search-params';
 
 const {TextArea} = Input;
 const {Title, Paragraph} = Typography;
@@ -68,28 +68,6 @@ interface SampleProps {
   themeColors: ThemeColors;
   colorsMode: string;
   setColorsMode: (str: string) => void;
-  COLORS: COLORS;
-  setCOLORS: (c: COLORS) => void;
-  showNotesPar: boolean;
-  setShowNotesPar: (b: boolean) => void;
-  enableVol: boolean;
-  setEnableVol: (b: boolean) => void;
-  isPitchDynamicallyScaled: boolean;
-  setIsPitchDynamicallyScaled: (b: boolean) => void;
-  isSettingsPinned: boolean;
-  setIsSettingsPinned: (b: boolean) => void;
-  initialRange: number[];
-  setInitialRange: (n: number[]) => void;
-  divisor: number;
-  setDivisor: (n: number) => void;
-  threshold: number;
-  setThreshold: (n: number) => void;
-  component: string;
-  setComponent: (s: string) => void;
-  ballPosition: number;
-  setBallPosition: (n: number) => void;
-  openSetting: boolean;
-  setOpenSetting: (b: boolean) => void;
 }
 
 const Sample: React.FC<SampleProps> = ({
@@ -111,29 +89,6 @@ const Sample: React.FC<SampleProps> = ({
   themeColors,
   colorsMode,
   setColorsMode,
-
-  COLORS,
-  setCOLORS,
-  showNotesPar,
-  setShowNotesPar,
-  enableVol,
-  setEnableVol,
-  isPitchDynamicallyScaled,
-  setIsPitchDynamicallyScaled,
-  isSettingsPinned,
-  setIsSettingsPinned,
-  initialRange,
-  setInitialRange,
-  divisor,
-  setDivisor,
-  threshold,
-  setThreshold,
-  component,
-  setComponent,
-  ballPosition,
-  setBallPosition,
-  openSetting,
-  setOpenSetting,
 }) => {
   // strings
   const {
@@ -152,6 +107,7 @@ const Sample: React.FC<SampleProps> = ({
 
   // Canvas values
   const size = [400, 1400];
+  const [initialRange, setInitialRange] = useState<number[]>([100, 300]);
   const [config] = useState({
     SRATE: 44100,
     fxmin: 50,
@@ -159,18 +115,22 @@ const Sample: React.FC<SampleProps> = ({
     fxhigh: 600 - 200, // This initial value will be updated by useEffect below
     fxmax: 600,
   });
+  const [COLORS, setCOLORS] = useState(themeColors[theme].default);
 
   // open/close
+  const [openSetting, setOpenSetting] = useState(false);
   const [txtShow, setTxtShow] = useState<boolean>(false);
   const [heteroShowSwitch, setHeteroShowSwitch] = useState<boolean>(true);
   const [openTour, setOpenTour] = useState<boolean>(false);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isRetry, setIsRetry] = useState(false);
+  const [enableVol, setEnableVol] = useState<boolean>(false);
   const [readyToRestart, setReadyToRestart] = useState<boolean>(false);
   const [isOpenTextbox, setIsOpenTextbox] = useState<boolean>(false);
   const [showNextPre, setShowNextPre] = useState<boolean>(false);
   const [showListen, setShowListen] = useState<boolean>(false);
   const [showBall] = useState<boolean>(true);
+  const [isSettingsPinned, setIsSettingsPinned] = useState<boolean>(false);
 
   // reference variables
   const location = useLocation();
@@ -182,18 +142,24 @@ const Sample: React.FC<SampleProps> = ({
 
   // initial Value
   const [volume, setVolume] = useState(0);
+  const [threshold, setThreshold] = useState<number>(70);
   const [maxLyricCount, setMaxLyricCount] = useState<number>(2);
   const [playLyricCount, setPlayLyricCount] = useState<number>(0);
+  const [divisor, setDivisor] = useState<number>(10);
+  const [ballPosition, setBallPosition] = useState<number>(0.5);
   const [pitchDiff, setPitchDiff] = useState<number[]>([0]);
-  const [, setAvgPitchDiff] = useState<number>();
+  const [avgPitchDiff, setAvgPitchDiff] = useState<number>();
+  // Hz/Notes
+  const [showNotesPar, setShowNotesPar] = useState(false);
 
   // selected choice
+  const [component, setComponent] = useState<string>('ConstantTxt');
   const [, setCurrentSelection] = useState('Constant');
   const [syllableCount, setSyllableCount] = useState<string>('none');
   const [baseFilenames, setBaseFilenames] = useState<string[]>([]);
   const [heteronymFilenames, setHeteronymFilenames] = useState<string[]>([]);
   const [fileContent, setFileContent] = useState<string[]>([]);
-  const [selectedNum, setSelectedNum] = useState<number>(0);
+  const [selectedNum, setSelectedNum] = useState<string[]>(['2']);
   const [selectedDefaultText, setSelectedDefaultText] = useState<string>('0');
 
   // const audioPlayerNew = useRef<AudioPlayer>(null);
@@ -204,9 +170,9 @@ const Sample: React.FC<SampleProps> = ({
   // Stores longest times for Heteronyms and Human Curve Exercises
   useEffect(() => {
     const heteroLongTimeURL =
-      'https://ceas5.uc.edu/transvoice/heteroJsonData/precomputedHeteroData.json';
+      'https://ceas5.uc.edu/transvoice/heteroJsonData/precomputedLongestTimes.json';
     const humanCurveLongTimeURL =
-      'https://ceas5.uc.edu/transvoice/jsonDataOm/precomputedHumanCurveData.json';
+      'https://ceas5.uc.edu/transvoice/jsonDataOm/precomputedLongestTimes.json';
 
     fetch(heteroLongTimeURL)
       .then(response => {
@@ -216,7 +182,7 @@ const Sample: React.FC<SampleProps> = ({
         return response.json();
       })
       .then(data => {
-        localStorage.setItem('heteroPrecomputedData', JSON.stringify(data));
+        localStorage.setItem('heteroLongestTimes', JSON.stringify(data));
       });
 
     fetch(humanCurveLongTimeURL)
@@ -227,7 +193,7 @@ const Sample: React.FC<SampleProps> = ({
         return response.json();
       })
       .then(data => {
-        localStorage.setItem('humanCurvePrecomputedData', JSON.stringify(data));
+        localStorage.setItem('humanCurveLongestTimes', JSON.stringify(data));
       });
   }, []);
 
@@ -271,7 +237,7 @@ const Sample: React.FC<SampleProps> = ({
     const processedSentences = sentences.map(sentence => {
       const clauses = sentence.split(/(;|,|\/|\n)/);
 
-      const processedClauses = clauses.reduce((acc, clause) => {
+      const processedClauses = clauses.reduce((acc, clause, index) => {
         const trimmedClause = clause.trim();
         if (trimmedClause.length === 0) {
           return acc;
@@ -560,8 +526,7 @@ const Sample: React.FC<SampleProps> = ({
   const handleChantingMenuClick: MenuProps['onClick'] = e => {
     setSelectedChantingOption(e.key);
     setComponent(`ChantingTxt-${e.key}`);
-    setSelectedNum(1);
-    setSyllableCount('none');
+    setSelectedNum(['6']);
   };
 
   const chantingOptions = (
@@ -601,6 +566,133 @@ const Sample: React.FC<SampleProps> = ({
     }
   }, [location]);
 
+  const renderComponent = () => {
+    switch (component) {
+      case 'stair':
+        return (
+          <Stair
+            setShowNotesPar={setShowNotesPar}
+            setMaxLyricCount={setMaxLyricCount}
+            initialRange={initialRange}
+            divisor={divisor}
+            txtShow={txtShow}
+            playLyricCount={playLyricCount}
+            setPlayingPause={setPlayingPause}
+            isRetry={isRetry}
+            COLORS={COLORS}
+            showNotesPar={showNotesPar}
+            size={size}
+            config={config}
+            isPlaying={isPlaying}
+            enableAdvFeatures={enableAdvFeatures}
+            theme={theme}
+            themeColors={themeColors}
+            colorsMode={colorsMode}
+          />
+        );
+      case 'constant':
+        return (
+          <ConstantTxt
+            handlePitchDiffChange={handlePitchDiffChange}
+            ref={parentRef}
+            initialRange={initialRange}
+            divisor={divisor}
+            ballPosition={ballPosition}
+            isRetry={isRetry}
+            setPlayingPause={setPlayingPause}
+            COLORS={COLORS}
+            showNotesPar={showNotesPar}
+            size={size}
+            config={config}
+            isPlaying={isPlaying}
+            enableAdvFeatures={enableAdvFeatures}
+            theme={theme}
+            themeColors={themeColors}
+            colorsMode={colorsMode}
+          />
+        );
+      case 'heteronym':
+        return (
+          <Heteronym
+            setMaxLyricCount={setMaxLyricCount}
+            setIsListen={setIsListen}
+            isListen={isListen}
+            initialRange={initialRange}
+            divisor={divisor}
+            setPlayingPause={setPlayingPause}
+            isRetry={isRetry}
+            onAudioSrcChange={handleAudioSrc}
+            setHeteronymFilenames={setHeteronymFilenames}
+            heteronymOrder={heteronymOrder}
+            onPlayLyricCountChange={handlePlayLyricCountChange}
+            num={num}
+            type={type}
+            gender={gender}
+            genderName={genderName}
+            COLORS={COLORS}
+            showNotesPar={showNotesPar}
+            playLyricCount={playLyricCount}
+            size={size}
+            config={config}
+            isPlaying={isPlaying}
+            enableAdvFeatures={enableAdvFeatures}
+            theme={theme}
+            themeColors={themeColors}
+            colorsMode={colorsMode}
+          />
+        );
+      case 'fixed':
+        return (
+          <Fixed
+            setMaxLyricCount={setMaxLyricCount}
+            setIsListen={setIsListen}
+            isListen={isListen}
+            initialRange={initialRange}
+            divisor={divisor}
+            setPlayingPause={setPlayingPause}
+            isRetry={isRetry}
+            onAudioSrcChange={handleAudioSrc}
+            setBaseFilenames={setBaseFilenames}
+            onPlayLyricCountChange={handlePlayLyricCountChange}
+            syllableCount={syllableCount}
+            gender={gender}
+            genderName={genderName}
+            COLORS={COLORS}
+            showNotesPar={showNotesPar}
+            playLyricCount={playLyricCount}
+            size={size}
+            config={config}
+            isPlaying={isPlaying}
+            enableAdvFeatures={enableAdvFeatures}
+            theme={theme}
+            themeColors={themeColors}
+            colorsMode={colorsMode}
+          />
+        );
+      default:
+        return (
+          <ConstantTxt
+            handlePitchDiffChange={handlePitchDiffChange}
+            ref={parentRef}
+            initialRange={initialRange}
+            divisor={divisor}
+            ballPosition={ballPosition}
+            isRetry={isRetry}
+            setPlayingPause={setPlayingPause}
+            COLORS={COLORS}
+            showNotesPar={showNotesPar}
+            size={size}
+            config={config}
+            isPlaying={isPlaying}
+            enableAdvFeatures={enableAdvFeatures}
+            theme={theme}
+            themeColors={themeColors}
+            colorsMode={colorsMode}
+          />
+        );
+    }
+  };
+
   useEffect(() => {
     if (component.startsWith('ChantingTxt')) {
       setChantingStep(1);
@@ -620,22 +712,22 @@ const Sample: React.FC<SampleProps> = ({
       e.target.innerText === 'CONSTANT'
     ) {
       setComponent('ConstantTxt');
-      setSelectedNum(0);
+      setSelectedNum(['2']);
     } else if (
       e.target.innerText === 'Stair' ||
       e.target.innerText === 'STAIR'
     ) {
       setComponent('Stair');
-      setSelectedNum(2);
+      setSelectedNum(['3']);
     } else if (
       e.target.innerText === 'Chanting' ||
       e.target.innerText === 'CHANTING'
     ) {
       setComponent('ChantingTxt');
-      setSelectedNum(1);
+      setSelectedNum(['6']);
     } else {
       setComponent('Heteronym');
-      setSelectedNum(4);
+      setSelectedNum(['4']);
     }
     setSyllableCount('none');
   };
@@ -651,11 +743,11 @@ const Sample: React.FC<SampleProps> = ({
       setCurrentSelection('Staircase');
     } else if (componentType === 'Chanting') {
       setCurrentSelection('ChantingTxt');
-      setSelectedNum(1);
+      setSelectedNum(['6']);
     } else {
       const tt = 'Syllables ' + syllableCountType;
       setCurrentSelection(tt);
-      setSelectedNum(3);
+      setSelectedNum(['5']);
     }
 
     setComponent(componentType);
@@ -806,9 +898,7 @@ const Sample: React.FC<SampleProps> = ({
             setMaxLyricCount={setMaxLyricCount}
             setIsListen={setIsListen}
             isListen={isListen}
-            isPitchDynamicallyScaled={isPitchDynamicallyScaled}
             initialRange={initialRange}
-            setInitialRange={setInitialRange}
             divisor={divisor}
             setPlayingPause={setPlayingPause}
             isRetry={isRetry}
@@ -836,9 +926,7 @@ const Sample: React.FC<SampleProps> = ({
             setMaxLyricCount={setMaxLyricCount}
             setIsListen={setIsListen}
             isListen={isListen}
-            isPitchDynamicallyScaled={isPitchDynamicallyScaled}
             initialRange={initialRange}
-            setInitialRange={setInitialRange}
             divisor={divisor}
             setPlayingPause={setPlayingPause}
             isRetry={isRetry}
@@ -904,11 +992,22 @@ const Sample: React.FC<SampleProps> = ({
     }
   };
 
+  const handleFinishExercise = () => {
+    console.log('Setting chantingStep to 4');
+    setChantingStep(4);
+  };
+
   useEffect(() => {
     if (chantingStep === 1 && volume > threshold - 40 && enableVol) {
       setChantingStep(2); // Move to step 2 only if you're in step 1
     }
   }, [volume, chantingStep, threshold, enableVol]);
+
+  const handlePreviousSentence = () => {
+    setCurrentSentenceIndex(prevIndex =>
+      prevIndex > 0 ? prevIndex - 1 : sentences.length - 1
+    );
+  };
 
   const MainButtons = (): React.ReactNode => {
     const handleRetry = () => {
@@ -918,8 +1017,6 @@ const Sample: React.FC<SampleProps> = ({
         setChantingActualPitch([]); // Clear pitch data
         setChantingMeanPitch(null); // Reset mean pitch
         setCurrentSentenceIndex(1); // Reset sentence index
-        setIsPlaying(false); // Ensure that the playback state is reset
-        setPreviousStep(0); // Reset the previous step tracker
       }
 
       // Reset canvas
@@ -1006,7 +1103,22 @@ const Sample: React.FC<SampleProps> = ({
     ).toFixed(2);
     setAvgPitchDiff(parseFloat(formattedAvgPitchDiff));
   }, [pitchDiff]);
-
+  const RecordingBar = (): React.ReactNode => {
+    return (
+      <Flex justify="center" wrap="wrap" gap="small">
+        {isPlaying ? (
+          <>
+            <LoadingOutlined />
+            Recording...
+          </>
+        ) : (
+          <>
+            Recording stopped. Your average pitch difference is {avgPitchDiff}.
+          </>
+        )}
+      </Flex>
+    );
+  };
   const openEnterTextBox = () => {
     setIsOpenTextbox(!isOpenTextbox);
     setSelectedDefaultText('0');
@@ -1398,30 +1510,6 @@ const Sample: React.FC<SampleProps> = ({
                         </Button>
                       </Tooltip>
 
-                      <Tooltip title="Switch to the Chanting exercise">
-                        <Dropdown
-                          overlay={chantingOptions}
-                          overlayClassName={`customDropdown-${theme}`}
-                        >
-                          <Button
-                            type={
-                              component.startsWith('ChantingTxt')
-                                ? 'primary'
-                                : 'default'
-                            }
-                            className={
-                              component.startsWith('ChantingTxt')
-                                ? `customMainButtons-primary-${theme}`
-                                : `customMainButtons-${theme}`
-                            }
-                            style={{width: '124px'}}
-                          >
-                            {selectedChantingOption}
-                            <DownOutlined />
-                          </Button>
-                        </Dropdown>
-                      </Tooltip>
-
                       <Tooltip title="Switch to the Stair exercise">
                         <Button
                           type={component === 'Stair' ? 'primary' : 'default'}
@@ -1434,29 +1522,6 @@ const Sample: React.FC<SampleProps> = ({
                         >
                           STAIR
                         </Button>
-                      </Tooltip>
-
-                      <Tooltip title="Switch to the Human Curve exercise">
-                        <Dropdown
-                          menu={{items: itemsSyllable}}
-                          placement="bottom"
-                          overlayClassName={`customDropdown-${theme}`}
-                        >
-                          <Button
-                            type={component === 'Fixed' ? 'primary' : 'default'}
-                            className={
-                              component === 'Fixed'
-                                ? `customMainButtons-primary-${theme}`
-                                : `customMainButtons-${theme}`
-                            }
-                            style={{width: '155px'}}
-                          >
-                            {syllableCount === 'none'
-                              ? 'HUMAN CURVE'
-                              : syllableCount + ' SYLLABLE'}
-                            <DownOutlined />
-                          </Button>
-                        </Dropdown>
                       </Tooltip>
 
                       <Tooltip title="Switch to the Heteronyms exercise">
@@ -1473,6 +1538,48 @@ const Sample: React.FC<SampleProps> = ({
                         >
                           HETERONYMS
                         </Button>
+                      </Tooltip>
+                      <Tooltip title="Switch to the Human Curve exercise">
+                        <Dropdown
+                          menu={{items: itemsSyllable}}
+                          placement="bottom"
+                          overlayClassName={`customDropdown-${theme}`}
+                        >
+                          <Button
+                            type={component === 'Fixed' ? 'primary' : 'default'}
+                            className={
+                              component === 'Fixed'
+                                ? `customMainButtons-primary-${theme}`
+                                : `customMainButtons-${theme}`
+                            }
+                          >
+                            {syllableCount === 'none'
+                              ? 'HUMAN CURVE'
+                              : syllableCount + ' SYLLABLE'}{' '}
+                            <DownOutlined />
+                          </Button>
+                        </Dropdown>
+                      </Tooltip>
+                      <Tooltip title="Switch to the Chanting exercise">
+                        <Dropdown
+                          overlay={chantingOptions}
+                          overlayClassName={`customDropdown-${theme}`}
+                        >
+                          <Button
+                            type={
+                              component.startsWith('ChantingTxt')
+                                ? 'primary'
+                                : 'default'
+                            }
+                            className={
+                              component.startsWith('ChantingTxt')
+                                ? `customMainButtons-primary-${theme}`
+                                : `customMainButtons-${theme}`
+                            }
+                          >
+                            {selectedChantingOption}
+                          </Button>
+                        </Dropdown>
                       </Tooltip>
                     </Space.Compact>
                   </Space>
@@ -1544,15 +1651,15 @@ const Sample: React.FC<SampleProps> = ({
                   style={{display: 'grid', margin: 0, justifySelf: 'center'}}
                   className={`text-${theme}`}
                 >
-                  {items_3[selectedNum]?.label}
-                  {items_3[selectedNum]?.children}
+                  {items_3[parseInt(selectedNum[0]) - 1]?.label}
+                  {items_3[parseInt(selectedNum[0]) - 1]?.children}
                 </Paragraph>
 
                 <br />
 
                 <Paragraph className={`text-${theme}`}>
-                  {items_3[5].label}
-                  {items_3[5].children}
+                  {items_3[0].label}
+                  {items_3[0].children}
                 </Paragraph>
               </Typography>
             </Flex>
@@ -1573,13 +1680,9 @@ const Sample: React.FC<SampleProps> = ({
               setShowNotesPar={setShowNotesPar}
               showNotesPar={showNotesPar}
               setEnableVol={setEnableVol}
-              isPitchDynamicallyScaled={isPitchDynamicallyScaled}
-              setIsPitchDynamicallyScaled={setIsPitchDynamicallyScaled}
-              initialRange={initialRange}
               setInitialRange={setInitialRange}
               setDivisor={setDivisor}
               enableVol={enableVol}
-              threshold={threshold}
               setThreshold={setThreshold}
               component={component}
               setBallPosition={setBallPosition}

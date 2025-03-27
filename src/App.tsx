@@ -1,7 +1,6 @@
 import MainLayout from './MainLayout';
 import {BrowserRouter as Router} from 'react-router-dom';
 import WebFont from 'webfontloader';
-import React from 'react';
 
 WebFont.load({
   google: {
