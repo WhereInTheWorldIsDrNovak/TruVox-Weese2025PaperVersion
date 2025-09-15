@@ -1,6 +1,6 @@
 # TruVox
 ---
-**TruVox** is an open-source, accessible software platform for gender-affirming voice coaching, with a current focus on pitch training. Developed by the [Department of Electrical and Computer Engineering](https://ceas.uc.edu/academics/departments/electrical-computer-engineering.html) at the University of Cincinnati, TruVox is intended to supplement professional voice coaching or empower individuals who may not have access to professional resources. This package represents the version of TruVox used for our journal paper "TruVox web-based software for vocal pitch training in transgender women: Development and single-session evaluations" by Weese et al. and is provided as a version of record; keep an eye out for newer versions!
+**TruVox** is an open-source, accessible software platform for gender-affirming voice coaching, with a current focus on pitch training. Developed by the [Department of Electrical and Computer Engineering](https://ceas.uc.edu/academics/departments/electrical-computer-engineering.html) at the University of Cincinnati, TruVox is intended to supplement professional voice coaching or empower individuals who may not have access to professional resources. This package represents the version of TruVox used for our journal paper ["TruVox web-based software for vocal pitch training in transgender women: Development and single-session evaluations" by Weese et al.](https://formative.jmir.org/2025/1/e73841) and is provided as a version of record; keep an eye out for newer versions!
 
 ## Table of Contents
 
